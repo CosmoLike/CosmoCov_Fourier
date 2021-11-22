@@ -41,9 +41,9 @@
 #include "../cosmolike_core/theory/BAO.c"
 #include "../cosmolike_core/theory/external_prior.c"
 #include "../cosmolike_core/theory/covariances_3D.c"
-#include "../cosmolike_core/theory/covariances_fourier.c"
+// #include "../cosmolike_core/theory/covariances_fourier.c" // deprecated in this application!!
 #include "../cosmolike_core/theory/CMBxLSS_fourier.c"
-// #include "../cosmolike_core/theory/covariances_CMBxLSS_fourier.c"
+// #include "../cosmolike_core/theory/covariances_CMBxLSS_fourier.c" // deprecated in this application!!
 #include "../cosmolike_core/theory/covariances_fourier_nobin_simple.c"
 
 #include "init_LSSxCMB.c"
@@ -133,8 +133,8 @@ void run_cov_AB_CD(char ABCD[2][4], char *OUTFILE, char *PATH, double *ell, doub
       }
 
       if(weight){
-        if (nl1 == nl2){c_g = cov_G_AB_CD(ABCD, ell[nl1],dell[nl1],z_ar);}
-        if (covparams.ng){c_ng = cov_NG_AB_CD(ABCD, ell[nl1],ell[nl2],z_ar);}
+        if (nl1 == nl2){c_g = cov_G_AB_CD(ABCD, ell[nl1],dell[nl1],z_ar, is_ls);}
+        if (covparams.ng){c_ng = tab_cov_NG_AB_CD(ABCD, ell[nl1],ell[nl2],z_ar, is_ls);}
       }
 
       i=N_start[0]+nl1;
