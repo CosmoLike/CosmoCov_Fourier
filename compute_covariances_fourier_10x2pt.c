@@ -265,8 +265,8 @@ int main(int argc, char** argv)
     m0 = (i_pro1==i_pro2) ? l : 0;
     for (m=m0;m<Npower[i_pro2]; m++){
       if(k==hit){
-        sprintf(ABCD[0],probes[i_pro1]);
-        sprintf(ABCD[1],probes[i_pro2]);
+        sprintf(ABCD[0],"%s",probes[i_pro1]);
+        sprintf(ABCD[1],"%s",probes[i_pro2]);
         sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
         run_cov_AB_CD(ABCD,OUTFILE,covparams.outdir,ell,dell,l,m,k+N_blocks[i_block-1]);
       }
