@@ -802,8 +802,8 @@ int main(int argc, char** argv)
     if(ell[i]<like.lmax_shear) printf("%le\n",ell[i]);
   } 
 
-  covparams.ng = 1;
-  covparams.cng = 1;
+  covparams.ng = 0;
+  covparams.cng = 0;
 
   printf("----------------------------------\n");  
   sprintf(survey.name,"%s_area%le_ng%le_nl%le",survey_designation[t],survey.area,survey.n_gal,survey.n_lens);
@@ -813,7 +813,8 @@ int main(int argc, char** argv)
 #ifdef ONESAMPLE
   sprintf(covparams.outdir,"out_cov_lsstxso_1sample/");
 #else
-  sprintf(covparams.outdir,"out_cov_lsstxso/");
+  // sprintf(covparams.outdir,"out_cov_lsstxso/");
+  sprintf(covparams.outdir,"tests/old/");
   //sprintf(covparams.outdir,"/halo_nobackup/cosmos/teifler/covparallel/");
 #endif
 

@@ -134,7 +134,7 @@ void run_cov_AB_CD(char ABCD[2][4], char *OUTFILE, char *PATH, double *ell, doub
 
       if(weight){
         if (nl1 == nl2){c_g = cov_G_AB_CD(ABCD, ell[nl1],dell[nl1],z_ar, is_ls);}
-        if (covparams.ng){c_ng = tab_cov_NG_AB_CD(ABCD, ell[nl1],ell[nl2],z_ar, is_ls);}
+        if (covparams.ng){c_ng = cov_NG_AB_CD(ABCD, ell[nl1],ell[nl2],z_ar, is_ls);}
       }
 
       i=N_start[0]+nl1;
@@ -210,7 +210,7 @@ int main(int argc, char** argv)
   } 
 
   covparams.ng = 1;
-  covparams.cng = 1;
+  covparams.cng = 0;
 
   printf("----------------------------------\n");  
   sprintf(survey.name,"%s_area%le_ng%le_nl%le",survey_designation[t],survey.area,survey.n_gal,survey.n_lens);
@@ -219,7 +219,8 @@ int main(int argc, char** argv)
 #ifdef ONESAMPLE
   sprintf(covparams.outdir,"out_cov_lsstxso_1sample/");
 #else
-  sprintf(covparams.outdir,"out_cov_lsstxso/");
+  // sprintf(covparams.outdir,"out_cov_lsstxso/");
+  sprintf(covparams.outdir,"tests/new/");
 #endif
 
   printf("----------------------------------\n");
