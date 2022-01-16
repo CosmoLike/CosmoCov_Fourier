@@ -414,6 +414,29 @@ void init_probes(char *probes)
     like.kk = 1;
     printf("CMBkappa-CMBkappa computation initialized\n");
   }
+  if(strcmp(probes,"10x2pt")==0) {
+    like.Ndata = like.Ncl * (tomo.shear_Npowerspectra+tomo.ggl_Npowerspectra+tomo.clustering_Npowerspectra+2*tomo.clustering_Nbin+2*tomo.shear_Nbin+3);
+    like.pos_pos = 1;
+    like.gk = 1;
+    like.shear_pos = 1;
+    like.kk = 1;
+    like.ks = 1;
+    like.shear_shear = 1;
+    like.gy = 1;
+    like.sy = 1;
+    like.ky = 1;
+    like.yy = 1;
+    printf("Shear-Shear computation initialized\n");
+    printf("Shear-Position computation initialized\n");
+    printf("Position-Position computation initialized\n");
+    printf("CMBkappa-Shear computation initialized\n");
+    printf("CMBkappa-Position computation initialized\n");
+    printf("CMBkappa-CMBkappa computation initialized\n");
+    printf("y-Position computation initialized\n");
+    printf("y-Shear computation initialized\n");
+    printf("y-CMBkappa computation initialized\n");
+    printf("y-y computation initialized\n");
+  }
   printf("Total number of data points like.Ndata=%d\n",like.Ndata);
 }
 
@@ -687,6 +710,7 @@ void set_cmb_cmbs4() {
    cmb.sensitivity = 1.*(constants.pi/180.)/60.;
    cmb.pathLensRecNoise = "./cmblensrec/cmbs4/cmb_lmax3000.txt";
    like.lmax_kappacmb = 2999.;
+   like.lmax_y = 2999.;
    printf("path for CMB lens noise: %s\n", cmb.pathLensRecNoise);
 }
 
@@ -696,6 +720,7 @@ void set_cmb_so_Y5() {
    // cmb.sensitivity = 18.*(constants.pi/180.)/60.;
    cmb.pathLensRecNoise = "./cmblensrec/so/YEAR5_2colformat_nlkk_v3_1_0deproj0_SENS1_fsky0p4_it_lT30-3000_lP30-5000.dat";
    like.lmax_kappacmb = 2999.;
+   like.lmax_y = 2999.;
    cmb.fsky=0.4;
    printf("path for CMB lens noise: %s\n", cmb.pathLensRecNoise);
 }
@@ -705,6 +730,7 @@ void set_cmb_so_Y1() {
    // cmb.sensitivity = 18.*(constants.pi/180.)/60.;
    cmb.pathLensRecNoise = "./cmblensrec/so/YEAR1_nlkk_SOlike_y1_tt_SENS1_qe_fsky0p4_lT30-3000.dat";
    like.lmax_kappacmb = 2999.;
+   like.lmax_y = 2999.;
    cmb.fsky=0.4;
    printf("path for CMB lens noise: %s\n", cmb.pathLensRecNoise);
 }
