@@ -779,75 +779,58 @@ void compute_data_vector(char *details, double OMM, double S8, double NS, double
         // printf("time spent %le, %le\n",dt, pktest);exit(0);
   // t2 = clock(); printf("setting: %le\n", (double)(t2-t1)/CLOCKS_PER_SEC); t1 = t2;
   int start=0;  
-  if(like.shear_shear==1) {printf("here!\n");
+  if(like.shear_shear==1) {
     set_data_shear(like.Ncl, ell, pred, start);
     start=start+like.Ncl*tomo.shear_Npowerspectra;
-  }printf("here!!!\n");
-
-    // double da = (1. - limits.a_min)/(100.0);
-    // double logkmin = log(limits.k_min_cH0);
-    // double logkmax = log(limits.k_max_cH0);
-    // double dk = (logkmax - logkmin)/(100.0);
-    // double aa= limits.a_min, klog,kk;
-    // for (i=0; i<100; i++, aa +=da) {
-    //   if(aa>0.999) aa=.999;
-    //   klog  = logkmin;
-    //   // t1=clock();
-    //   for (j=0; j<100; j++, klog += dk) {
-    //     kk = exp(klog);
-    //     printf("%le %le %le \n", aa, kk, Pdelta(kk,aa));
-    //   }
-    // }
-    // exit(0);
-  // t2 = clock(); printf("shear: %le\n", (double)(t2-t1)/CLOCKS_PER_SEC); t1 = t2;
+  }
   if(like.shear_pos==1){
-    //printf("ggl\n");
+    printf("ggl, start %d\n", start);
     set_data_ggl(like.Ncl, ell, pred, start);
     start=start+like.Ncl*tomo.ggl_Npowerspectra;
-  } printf("here!!!!\n");
+  }
   // t2 = clock(); printf("ggl: %le\n", (double)(t2-t1)/CLOCKS_PER_SEC); t1 = t2;
   if(like.pos_pos==1){
-    //printf("clustering\n");
+    printf("clustering, start %d\n", start);
     set_data_clustering(like.Ncl,ell,pred, start);
     start=start+like.Ncl*tomo.clustering_Npowerspectra;
-  }printf("here!-\n");
+  }
   // t2 = clock(); printf("gg: %le\n", (double)(t2-t1)/CLOCKS_PER_SEC); t1 = t2;
 
   if(like.gk==1) {
-    printf("Computing data vector: gk\n");
+    printf("Computing data vector: gk, start %d\n", start);
     set_data_gk(ell, pred, start);
     start += like.Ncl * tomo.clustering_Nbin;
-  }printf("here!---\n");
+  }
   // t2 = clock(); printf("gk: %le\n", (double)(t2-t1)/CLOCKS_PER_SEC); t1 = t2;
   if(like.ks==1) {
-    printf("Computing data vector: ks\n");
+    printf("Computing data vector: ks, start %d\n", start);
     set_data_ks(ell, pred, start);
     start += like.Ncl * tomo.shear_Nbin;
   }
   // t2 = clock(); printf("ks: %le\n", (double)(t2-t1)/CLOCKS_PER_SEC); t1 = t2;
   if (like.kk) {
-    printf("Computing data vector: kk\n");
+    printf("Computing data vector: kk, start %d\n", start);
     set_data_kk(ell, pred, start);
     start += like.Ncl;
   }
   // t2 = clock(); printf("kk: %le\n", (double)(t2-t1)/CLOCKS_PER_SEC); t1 = t2;
   if (like.gy) {
-    printf("Computing data vector: gy\n");
+    printf("Computing data vector: gy, start %d\n", start);
     set_data_gy(ell, pred, start);
     start += like.Ncl * tomo.clustering_Nbin;
   }
   if (like.sy) {
-    printf("Computing data vector: sy\n");
+    printf("Computing data vector: sy, start %d\n", start);
     set_data_sy(ell, pred, start);
     start += like.Ncl * tomo.shear_Nbin;
   }
   if (like.ky) {
-    printf("Computing data vector: ky\n");
+    printf("Computing data vector: ky, start %d\n", start);
     set_data_ky(ell, pred, start);
     start += like.Ncl;
   }
   if (like.yy) {
-    printf("Computing data vector: yy\n");
+    printf("Computing data vector: yy, start %d\n", start);
     set_data_yy(ell, pred, start);
     start += like.Ncl;
   }
@@ -998,6 +981,11 @@ void save_zdistr_lenses(int zl){
   char cmb_yr[2][100]={"so_Y1","so_Y5"};
 
   init_cosmo_runmode("halomodel");
+  // init_cosmo_runmode("halofit");
+  // double z_max_limit = 4.;
+  // limits.a_min = 1./(1.+z_max_limit);
+  // limits.a_min_hm = 1./(1.+10);
+
   init_bary(argv[2]);
   init_binning_fourier(15,20.0,3000.0,3000.0,21.0,10,10);
 
@@ -1033,6 +1021,57 @@ void save_zdistr_lenses(int zl){
     0.0,0.0,0.0,\
     1.17,0.6,14.,1.,0.03,12.5,1.2,\
     6.5,0.752,0.,0.);
+  // compute_data_vector(arg3,0.3,0.8281663873060578,0.97,-1.,0.,0.05,0.7,0.,0.,\
+  //   gbias.b[0],gbias.b[1],gbias.b[2],gbias.b[3],gbias.b[4],\
+  //   gbias.b[5],gbias.b[6],gbias.b[7],gbias.b[8],gbias.b[9],\
+  //   0.0,0.0,0.0,0.0,0.0,\
+  //   0.0,0.0,0.0,0.0,0.0,\
+  //   sigma_zphot_shear[sce],\
+  //   0.0,0.0,0.0,0.0,0.0,\
+  //   0.0,0.0,0.0,0.0,0.0,\
+  //   sigma_zphot_clustering[sce],\
+  //   0.0,0.0,0.0,0.0,0.0,\
+  //   0.0,0.0,0.0,0.0,0.0,\
+  //   5.92,1.1,-0.47,0.0,\
+  //   0.0,0.0,0.0,0.0,0.0,0.0,\
+  //   0.0,0.0,0.0,\
+  //   1.17702,0.6,13.59369,0.84710,0.0330,12.4479,1.2,\
+  //   6.65445,0.752,-0.10650,0.); // HMCODE test T_AGN=1e7.8 K
+
+  // FILE *f = fopen("pdelta_hm_trans.txt","w");
+  // for(double aa=0.6;aa<1.;aa+=0.001){
+  //   for(double logk=log(limits.k_min_cH0);logk<log(limits.k_max_cH0);logk+=0.1){
+  //     fprintf(f, "%le %le %le\n", aa, exp(logk), Pdelta(exp(logk),aa));
+  //   }
+  // }
+  // fclose(f);
+
+  // FILE *f = fopen("Cl_ss_00_hm_trans.txt","w");
+  // // FILE *f = fopen("Cl_ss_00_hf.txt","w");
+  // for(double ll=30.;ll<3000.;ll+=100){
+  //   fprintf(f, "%le %le\n", ll, C_shear_tomo_sys(ll,0,0));
+  // }
+  // fclose(f);
+ 
+  // FILE *f = fopen("components_ss_00_hm_trans.txt","w");
+  // // FILE *f = fopen("components_ss_00_hf.txt","w");
+  // for(double aa=0.1;aa<1.;aa+=0.02){
+  //   for(double logk=log(limits.k_max_cH0/100.);logk<log(limits.k_max_cH0);logk+=0.5){
+  //     fprintf(f, "%le %le %le\n", aa, exp(logk), Pdelta(exp(logk),aa));
+  //   }
+  //   // fprintf(f, "%le %le %le %le %le\n", aa, W_kappa(aa,chi(aa),0), A_IA_Joachimi(aa), chi(aa), growfac(aa));
+  // }
+  // fclose(f);  
+
+  // double kk;
+  // FILE *f = fopen("I12_SSC.txt","w");
+  // for(double aa=0.2;aa<1.;aa+=0.02){
+  //   for(double logk=log(limits.k_min_cH0);logk<log(limits.k_max_cH0);logk+=0.5){
+  //     kk = exp(logk);
+  //     fprintf(f, "%le %le %le %le %le\n", aa, kk, I12_SSC(kk,aa), I12_SSC_yy(kk,aa),I12_SSC_my(kk,aa));
+  //   }
+  // }
+  // fclose(f);
 
   return 0;
 }

@@ -1,15 +1,3 @@
-#  SO LAT noise power spectra: post-component separation noise for Compton-y (thermal SZ)
-#  baseline sensitivity
-#  fsky = 0.4 
-#  thermal SZ (yy) 
-#  units = dimensionless 
-#  ell_min = 80 
-#  ell_max = 7979 
-#  Deproj-0: standard ILC 
-#  Deproj-1: CMB deprojection (constrained ILC) 
-#  Deproj-2: fiducial CIB deprojection (constrained ILC) 
-#  Deproj-3: CMB and fiducial CIB deprojection (constrained ILC) 
-#  columns: [ell] [Deproj-0] [Deproj-1] [Deproj-2] [Deproj-3]
 80 2.10662e-16 2.10676e-16 1.91767e-15 1.93301e-15
 81 2.07284e-16 2.07311e-16 1.89644e-15 1.91192e-15
 82 2.03960e-16 2.04000e-16 1.87544e-15 1.89106e-15

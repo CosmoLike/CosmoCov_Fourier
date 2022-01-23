@@ -179,7 +179,8 @@ int main(int argc, char** argv)
   t = atoi(argv[2]);
   
   //RUN MODE setup
-  init_cosmo_runmode("halofit");
+  // init_cosmo_runmode("halofit");
+  init_cosmo_runmode("halomodel");
   // init_binning_fourier(20,30.0,3000.0,3000.0,21.0,10,10);
   init_binning_fourier(15,20.0,3000.0,3000.0,0.0,10,10);
   init_survey(survey_designation[t],nsource_table[t],nlens_table[t],area_table[t]);
@@ -191,7 +192,7 @@ int main(int argc, char** argv)
   init_galaxies(arg1,arg2,"none","none","source_std","LSST_gold");
 #endif
   init_IA("none","GAMA"); 
-  init_probes("6x2pt");
+  init_probes("10x2pt");
 
   if(t==0) init_cmb("so_Y1");
   if(t==1) init_cmb("so_Y5");
@@ -210,7 +211,7 @@ int main(int argc, char** argv)
   } 
 
   covparams.ng = 1;
-  covparams.cng = 0;
+  covparams.cng = 1;
 
   printf("----------------------------------\n");  
   sprintf(survey.name,"%s_area%le_ng%le_nl%le",survey_designation[t],survey.area,survey.n_gal,survey.n_lens);
