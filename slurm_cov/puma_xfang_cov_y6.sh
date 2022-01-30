@@ -18,5 +18,5 @@ N=11781
 for i in {0..999}; do
 	i_cov=$((SLURM_ARRAY_TASK_ID*1000+i+1));
 	if [[ ${i_cov} -gt N ]]; then break; fi;
-	srun --nodes 1 --ntasks 1 ./compute_covariances_fourier ${i_cov} 1 >&/home/u1/xfang/output/job_output_${i_cov}.log
+	srun --nodes 1 --ntasks 1 ./compute_covariances_fourier_10x2pt ${i_cov} 1 >&/home/u1/xfang/output/job_output_${i_cov}.log
 done;
