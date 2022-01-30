@@ -39,3 +39,6 @@ ocelote_cov_1sample:
 
 puma_cov:
 	gcc compute_covariances_fourier.c -o ./compute_covariances_fourier $(opt_puma)
+
+puma_cov_102pt:
+	gcc compute_covariances_fourier_10x2pt.c -o ./compute_covariances_fourier_10x2pt $(opt_puma)
