@@ -25,7 +25,7 @@ home_cov_1sample:
 	gcc compute_covariances_fourier.c -o ./compute_covariances_fourier_1sample $(opt_home) -DONESAMPLE
 
 home_datav_102pt:
-	gcc like_fourier_10x2pt.c -o ./like_fourier_10x2pt $(opt_home)
+	gcc like_fourier_10x2pt.c $(cfftlog) -o ./like_fourier_10x2pt $(opt_home)
 # 	gcc like_fourier_10x2pt.c -o ./like_fourier_10x2pt_1sample $(opt_home) -DONESAMPLE
 
 
