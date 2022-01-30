@@ -220,8 +220,8 @@ int main(int argc, char** argv)
 #ifdef ONESAMPLE
   sprintf(covparams.outdir,"out_cov_lsstxso_1sample/");
 #else
-  // sprintf(covparams.outdir,"out_cov_lsstxso/");
-  sprintf(covparams.outdir,"tests/new/");
+  sprintf(covparams.outdir,"out_cov_lsstxso_10x2pt/");
+  // sprintf(covparams.outdir,"tests/new2/");
 #endif
 
   printf("----------------------------------\n");
