@@ -8,7 +8,7 @@
 #SBATCH --array=0-11
 #SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=1gb
-#SBATCH --time=10:00:00
+#SBATCH --time=100:00:00
 #SBATCH --output=%A.out
 #SBATCH --error=%A.err
 cd $SLURM_SUBMIT_DIR
@@ -18,5 +18,5 @@ N=11781
 for i in {0..999}; do
 	i_cov=$((SLURM_ARRAY_TASK_ID*1000+i+1));
 	if [[ ${i_cov} -gt N ]]; then break; fi;
-	srun --nodes 1 --ntasks 1 ./compute_covariances_fourier_10x2pt ${i_cov} 1 >&/home/u1/xfang/output/job_output_${i_cov}.log
+	srun --ntasks 1 --exclusive -c 1 ./compute_covariances_fourier_10x2pt ${i_cov} 1 >&/home/u1/xfang/output/job_output_${i_cov}.log
 done;
