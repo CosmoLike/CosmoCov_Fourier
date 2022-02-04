@@ -137,6 +137,7 @@ void init_cosmo_runmode(char *runmode)
   printf("Initializing Standard Runmode/Cosmology\n");
   printf("-------------------------------------------\n");
   set_cosmological_parameters_to_Planck_15_TT_TE_EE_lowP();
+  set_halomodel_parameters_to_HMCode20_fiducial();
   sprintf(pdeltaparams.runmode,"%s",runmode);
   printf("pdeltaparams.runmode =%s\n",pdeltaparams.runmode);
 }
@@ -724,6 +725,7 @@ void set_cmb_so_Y5() {
    cmb.fsky=0.4;
    cmb.path_yNoise = "./ynoise/SO_LAT_Nell_T_atmv1_goal_fsky0p4_ILC_tSZ.txt";
    printf("path for CMB lens noise: %s\n", cmb.pathLensRecNoise);
+   printf("path for CMB tSZ y noise: %s\n", cmb.path_yNoise);
 }
 void set_cmb_so_Y1() {
    sprintf(cmb.name, "so_Y1");
