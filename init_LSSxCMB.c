@@ -722,7 +722,7 @@ void set_cmb_so_Y5() {
    like.lmax_kappacmb = 2999.;
    like.lmax_y = 2999.;
    cmb.fsky=0.4;
-   cmb.path_yNoise = "./ynoise/SO_LAT_Nell_T_atmv1_goal_fsky0p4_ILC_tSZ.txt"
+   cmb.path_yNoise = "./ynoise/SO_LAT_Nell_T_atmv1_goal_fsky0p4_ILC_tSZ.txt";
    printf("path for CMB lens noise: %s\n", cmb.pathLensRecNoise);
 }
 void set_cmb_so_Y1() {
