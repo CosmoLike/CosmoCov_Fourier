@@ -16,7 +16,7 @@ module load gsl/2.6
 module load python/3.6/3.6.5
 # N=12880
 N=9591
-for i in {0..$((SLURM_NTASKS-1))}; do
+for ((i = 0; i < SLURM_NTASKS; i++)); do
 	i_cov=$((SLURM_ARRAY_TASK_ID*SLURM_NTASKS+i+1));
 	if [[ ${i_cov} -gt N ]]; then break; fi;
 	srun --ntasks 1 --exclusive -c 1 ./compute_covariances_fourier_10x2pt_slow ${i_cov} 1 >&/home/u1/xfang/output/job_output_${i_cov}.log
