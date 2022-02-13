@@ -40,7 +40,7 @@
 #include "../cosmolike_core/theory/IA.c"
 #include "../cosmolike_core/theory/BAO.c"
 #include "../cosmolike_core/theory/external_prior.c"
-#include "../cosmolike_core/theory/covariances_3D.c"
+#include "../cosmolike_core/theory/covariances_3D_extend.c"
 // #include "../cosmolike_core/theory/covariances_fourier.c" // deprecated in this application!!
 #include "../cosmolike_core/theory/CMBxLSS_fourier.c"
 // #include "../cosmolike_core/theory/covariances_CMBxLSS_fourier.c" // deprecated in this application!!
@@ -222,6 +222,9 @@ int main(int argc, char** argv)
 #else
   sprintf(covparams.outdir,"out_cov_lsstxso_10x2pt/");
   // sprintf(covparams.outdir,"tests/new2/");
+#endif
+#ifdef SLOW
+  sprintf(covparams.outdir,"out_cov_lsstxso_10x2pt_slow/");
 #endif
 
   printf("----------------------------------\n");
