@@ -11,6 +11,9 @@
 #SBATCH --time=15:00:00
 #SBATCH --output=%A.out
 #SBATCH --error=%A.err
+#SBATCH --mail-type=END,FAIL
+#SBATCH --mail-user=xfang@email.arizona.edu
+
 cd $SLURM_SUBMIT_DIR
 module load gsl/2.6
 module load python/3.6/3.6.5
