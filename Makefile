@@ -30,6 +30,10 @@ home_datav_102pt:
 	gcc like_fourier_10x2pt.c $(cfftlog) -o ./like_fourier_10x2pt $(opt_home)
 # 	gcc like_fourier_10x2pt.c -o ./like_fourier_10x2pt_1sample $(opt_home) -DONESAMPLE
 
+home_datav_102pt_fft:
+	gcc like_fourier_10x2pt.c $(cfftlog) -DRUN_FFT -o ./like_fourier_10x2pt_fft $(opt_home)
+home_datav_102pt_fft_notab:
+	gcc like_fourier_10x2pt.c $(cfftlog) -DRUN_FFT -DNOTAB -o ./like_fourier_10x2pt_fft_notab $(opt_home)
 
 ocelote_cov:
 	gcc compute_covariances_fourier.c -o ./compute_covariances_fourier $(opt_ocelote)
