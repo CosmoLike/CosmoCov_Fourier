@@ -1002,7 +1002,8 @@ void save_zdistr_lenses(int zl){
   sprintf(arg1,"zdistris/%s",source_zfile[sce]);
   sprintf(arg2,"zdistris/%s",lens_zfile[sce]);
   init_galaxies(arg1,arg2,"gaussian","gaussian",tomo_binning_source[sce],tomo_binning_lens[sce]);
-  init_IA("NLA_HF","GAMA"); 
+  // init_IA("NLA_HF","GAMA"); 
+  init_IA("NLA_z","none"); 
   init_probes("10x2pt");
   init_cmb(cmb_yr[sce]);
 

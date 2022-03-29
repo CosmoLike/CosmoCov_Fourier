@@ -663,6 +663,7 @@ void init_IA(char *model,char *lumfct)
 {  
   if(strcmp(lumfct,"GAMA")==0) set_LF_GAMA();
   else if(strcmp(lumfct,"DEEP2")==0) set_LF_DEEP2();
+  else if(strcmp(lumfct,"none")==0) printf("No LF used.\n");
   else {
     printf("init.c:init_IA: %s lumfct not defined\n",lumfct);
     printf("USING GAMA LF INSTEAD\n");
@@ -678,13 +679,16 @@ void init_IA(char *model,char *lumfct)
   if(strcmp(model,"none")==0)  like.IA=0;
   else if(strcmp(model,"NLA_HF")==0)  like.IA=1;
   else if(strcmp(model,"lin")==0)  like.IA=2;
+  else if(strcmp(model,"NLA_z")==0)  like.IA=4;
   else{
     printf("init.c:init_IA: %s IA model not defined\n",model);
     exit(1);
   }
   printf("SET IA MODEL=%s\n",model);
   set_ia_priors();
-  log_like_f_red();
+  if(like.IA!=4){
+    log_like_f_red();
+  }
 }
 
 
