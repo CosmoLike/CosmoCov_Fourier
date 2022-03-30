@@ -530,17 +530,17 @@ int set_nuisance_gas(double Gamma_KS, double beta, double lgM0, double alpha,\
                      double A_star, double lgM_star, double sigma_star,\
                      double lgT_w, double f_H, double eps1, double eps2)
 {
-  gas.Gamma_KS=Gamma_KS;
-  gas.beta=beta;
-  gas.lgM0=lgM0;
-  gas.alpha=alpha;
-  gas.A_star=A_star;
-  gas.lgM_star=lgM_star;
-  gas.sigma_star=sigma_star;
-  gas.lgT_w=lgT_w;
-  gas.f_H=f_H;
-  gas.eps1=eps1;
-  gas.eps2=eps2;
+   nuisance.gas_Gamma_KS=Gamma_KS;
+   nuisance.gas_beta=beta;
+   nuisance.gas_lgM0=lgM0;
+   nuisance.gas_alpha=alpha;
+   nuisance.gas_A_star=A_star;
+   nuisance.gas_lgM_star=lgM_star;
+   nuisance.gas_sigma_star=sigma_star;
+   nuisance.gas_lgT_w=lgT_w;
+   nuisance.gas_f_H=f_H;
+   nuisance.gas_eps1=eps1;
+   nuisance.gas_eps2=eps2;
 return 1;
 }
 
