@@ -154,19 +154,19 @@ double data_read(int READ, int ci)
 int dvmask_read(int READ, int ci)
 {
   int i,intspace;
-  static int *data = 0;
+  static double *data = 0;
   
   if(READ==0 || data ==0){
     data  = create_double_vector(0, like.Ndata-1);      
     FILE *F;
     F=fopen(like.MASK_FILE,"r");
     for (i=0;i<like.Ndata; i++){  
-      fscanf(F,"%d %d\n",&intspace,&data[i]);
+      fscanf(F,"%d %lf\n",&intspace,&data[i]);
     }
     fclose(F);
     printf("FINISHED READING DATA VECTOR\n");
   }    
-  return data[ci];
+  return (int)data[ci];
 }
 
 double bary_read(int READ, int PC, int cj)
