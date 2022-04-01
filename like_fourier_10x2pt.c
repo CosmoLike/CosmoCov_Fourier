@@ -355,17 +355,7 @@ int set_cosmology_params(input_cosmo_params_local ic)
   if (cosmology.h0 < 0.4 || cosmology.h0 > 0.9) return 0;
   if (cosmology.MGmu < -3.0 || cosmology.MGmu > 3.0) return 0;
   if (cosmology.MGSigma < -3.0 || cosmology.MGSigma > 3.0) return 0; // DESY1 extension paper flat priors
-  //CH BEGINS 
-  //CH: to use for running planck15_BA0_w0_wa prior alone) 
-  //printf("like_fourier.c from WFIRST_forecasts: cosmology bounds set for running with planck15_BA0_w0_wa prior\n");
-  //if (cosmology.Omega_m < 0.05 || cosmology.Omega_m > 0.6) return 0; 
-  //if (cosmology.omb < 0.01 || cosmology.omb > 0.1) return 0; 
-  //if (cosmology.sigma_8 < 0.5 || cosmology.sigma_8 > 1.1) return 0; 
-  //if (cosmology.n_spec < 0.84 || cosmology.n_spec > 1.06) return 0; 
-  //if (cosmology.w0 < -2.1 || cosmology.w0 > 1.5) return 0; 
-  //if (cosmology.wa < -5.0 || cosmology.wa > 2.6) return 0; 
-  //if (cosmology.h0 < 0.3 || cosmology.h0 > 0.9) return 0; 
-  //CH ENDS
+
   return 1;
 }
 
@@ -398,8 +388,8 @@ int set_nuisance_ia(double A_ia, double eta_ia)
 {
   nuisance.A_ia=A_ia;  
   nuisance.eta_ia=eta_ia;
-  if (nuisance.A_ia < 0.0 || nuisance.A_ia > 10.0) return 0;
-  if (nuisance.eta_ia < -10.0 || nuisance.eta_ia> 10.0) return 0;
+  if (nuisance.A_ia < -5.0 || nuisance.A_ia > 5.0) return 0;
+  if (nuisance.eta_ia < -5.0 || nuisance.eta_ia> 5.0) return 0;
   return 1;
 }
 
@@ -821,7 +811,7 @@ void save_zdistr_lenses(int zl){
   init_binning_fourier(25,20.0,7979.0,7979.0,21.0,10,10);
 
   // init_priors(0.002,sigma_zphot_shear[sce],0.001,0.001,sigma_zphot_clustering[sce],0.001,0.001,3.0,1.2,3.8,2.0,16.0,5.0,0.8);
-  init_priors(0.002,sigma_zphot_shear[sce],0.001,0.001,sigma_zphot_clustering[sce],0.001,0.001,3.0,3.8);
+  init_priors(0.002,sigma_zphot_shear[sce],0.001,0.001,sigma_zphot_clustering[sce],0.001,0.001);
   init_survey(survey_designation[sce],nsource_table[sce],nlens_table[sce],area_table[sce]);
   sprintf(arg1,"zdistris/%s",source_zfile[sce]);
   sprintf(arg2,"zdistris/%s",lens_zfile[sce]);

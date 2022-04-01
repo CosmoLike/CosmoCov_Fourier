@@ -1,8 +1,9 @@
 double invcov_read(int READ, int ci, int cj);
 double data_read(int READ, int ci);
 double bary_read(int READ, int PC, int cj);
+void init_data_inv(char *INV_FILE, char *DATA_FILE);
 void init_data_inv_bary(char *INV_FILE, char *DATA_FILE, char *BARY_FILE);
-void init_priors(double M_Prior, double SigZ_source, double DeltaZ_source_Prior, double SigZ_source_Prior, double SigZ_lens, double DeltaZ_lens_Prior, double SigZ_lens_Prior, double A_IA_Prior, double etaIA_Prior);
+void init_priors(double M_Prior, double SigZ_source, double DeltaZ_source_Prior, double SigZ_source_Prior, double SigZ_lens, double DeltaZ_lens_Prior, double SigZ_lens_Prior);
 void init_survey(char *surveyname, double nsource, double nlens, double area);
 void init_galaxies(char *SOURCE_ZFILE, char *LENS_ZFILE, char *lensphotoz, char *sourcephotoz, char *tomo_binning_source, char *tomo_binning_lens);
 void init_cosmo_runmode(char *runmode);
@@ -52,6 +53,22 @@ int count_rows(char* filename,const char delimiter){
    return count;
 }
 
+
+void init_data_inv(char *INV_FILE, char *DATA_FILE)
+{
+  double init;
+  printf("\n");
+  printf("---------------------------------------\n");
+  printf("Initializing data vector and covariance\n");
+  printf("---------------------------------------\n");
+
+  sprintf(like.INV_FILE,"%s",INV_FILE);
+  printf("PATH TO INVCOV: %s\n",like.INV_FILE);
+  sprintf(like.DATA_FILE,"%s",DATA_FILE);
+  printf("PATH TO DATA: %s\n",like.DATA_FILE);
+  init=data_read(0,1);
+  init=invcov_read(0,1,1);
+}
 
 void init_data_inv_bary(char *INV_FILE, char *DATA_FILE, char *BARY_FILE)
 {
@@ -168,7 +185,7 @@ void init_binning_fourier(int Ncl, double lmin, double lmax, double lmax_shear, 
 }
 
 
-void init_priors(double M_Prior, double SigZ_source, double DeltaZ_source_Prior, double SigZ_source_Prior, double SigZ_lens, double DeltaZ_lens_Prior, double SigZ_lens_Prior, double A_ia_Prior, double eta_ia_Prior)
+void init_priors(double M_Prior, double SigZ_source, double DeltaZ_source_Prior, double SigZ_source_Prior, double SigZ_lens, double DeltaZ_lens_Prior, double SigZ_lens_Prior)
 {
   int i;
 
@@ -206,12 +223,6 @@ void init_priors(double M_Prior, double SigZ_source, double DeltaZ_source_Prior,
     prior.sigma_zphot_clustering[i][1]= SigZ_lens_Prior;
   }
   like.clphotoz=1;
-
-  prior.A_ia[0]=0.5; 
-  prior.A_ia[1]=A_ia_Prior;
-  
-  prior.eta_ia[0]=0.; 
-  prior.eta_ia[1]=eta_ia_Prior; 
   
   like.IA=4;
 
@@ -232,12 +243,6 @@ void init_priors(double M_Prior, double SigZ_source, double DeltaZ_source_Prior,
   printf("Photo-z priors Clustering\n");
   printf("Delta_z=%le, Sigma (Delta_z)=%le\n",prior.bias_zphot_clustering[0][0],prior.bias_zphot_clustering[0][1]);
   printf("Sigma_z=%le, Sigma (Sigma_z)=%le\n",prior.sigma_zphot_clustering[0][0],prior.sigma_zphot_clustering[0][1]);
-
-  printf("\n");
-  printf("---------------------------------------\n");
-  printf("IA Priors\n");
-  printf("A_IA=%le, A_IA_Prior=%le\n",prior.A_ia[0],prior.A_ia[1]);
-  printf("eta_ia=%le, etaIA_Prior=%le\n",prior.eta_ia[0],prior.eta_ia[1]);
 
   printf("\n");
 #endif
