@@ -709,7 +709,9 @@ void set_cmb_so_Y5() {
    // cmb.sensitivity = 18.*(constants.pi/180.)/60.;
    cmb.pathLensRecNoise = "./cmblensrec/so/YEAR5_2colformat_nlkk_v3_1_0deproj0_SENS1_fsky0p4_it_lT30-3000_lP30-5000.dat";
    like.lmax_kappacmb = 2999.;
+   like.lmin_kappacmb = 2.;
    like.lmax_y = 7979.;
+   like.lmin_y = 80.;
    cmb.fsky=0.4;
    cmb.path_yNoise = "./ynoise/SO_LAT_Nell_T_atmv1_goal_fsky0p4_ILC_tSZ.txt";
    printf("path for CMB lens noise: %s\n", cmb.pathLensRecNoise);
@@ -721,6 +723,8 @@ void set_cmb_so_Y1() {
    // cmb.sensitivity = 18.*(constants.pi/180.)/60.;
    cmb.pathLensRecNoise = "./cmblensrec/so/YEAR1_nlkk_SOlike_y1_tt_SENS1_qe_fsky0p4_lT30-3000.dat";
    like.lmax_kappacmb = 2999.;
+   like.lmin_kappacmb = 2.;
+   like.lmin_y = 80.;
    like.lmax_y = 7979.;
    cmb.fsky=0.4;
    printf("path for CMB lens noise: %s\n", cmb.pathLensRecNoise);

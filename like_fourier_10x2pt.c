@@ -195,23 +195,14 @@ void set_data_ggl(double *ell, double *data, int start)
   int Ncl = like.Ncl;
   for (nz = 0; nz < tomo.ggl_Npowerspectra; nz++){
     zl = ZL(nz); zs = ZS(nz);
-#ifdef ONESAMPLE
-    if(zl==0){
-      for (i = 0; i < Ncl; i++){data[start+(Ncl*nz)+i] = 0.;}
-    }
-    else{
-#endif
-      for (i = 0; i < Ncl; i++){
-        if (test_kmax(ell[i],zl)){
-          data[start+(Ncl*nz)+i] = C_gl_tomo_sys(ell[i],zl,zs);
-        }
-        else{
-          data[start+(Ncl*nz)+i] = 0.;
-        }
+    for (i = 0; i < Ncl; i++){
+      if (test_kmax(ell[i],zl) && ell[i] < like.lmax_shear){
+        data[start+(Ncl*nz)+i] = C_gl_tomo_sys(ell[i],zl,zs);
       }
-#ifdef ONESAMPLE
+      else{
+        data[start+(Ncl*nz)+i] = 0.;
+      }
     }
-#endif
   }
 }
 
@@ -231,15 +222,9 @@ void set_data_clustering(double *ell, double *data, int start){
 
 void set_data_gk(double *ell, double *data, int start)
 {
-#ifdef ONESAMPLE
-  int nz=0;
-  for (int i=0; i<like.Ncl; i++) {data[start+(like.Ncl*nz)+i] = 0.;}
-  for (nz=1; nz<tomo.clustering_Nbin; nz++){
-#else
   for (int nz=0; nz<tomo.clustering_Nbin; nz++){
-#endif
     for (int i=0; i<like.Ncl; i++){
-       if (ell[i]<like.lmax_kappacmb && test_kmax(ell[i],nz)){
+       if (ell[i]<like.lmax_kappacmb && ell[i]>like.lmin_kappacmb && test_kmax(ell[i],nz)){
           data[start+(like.Ncl*nz)+i] = C_gk_nointerp(ell[i],nz);
        }
        else{
@@ -253,7 +238,7 @@ void set_data_ks(double *ell, double *data, int start)
 {
    for (int nz=0; nz<tomo.shear_Nbin; nz++){
       for (int i=0; i<like.Ncl; i++){
-         if (ell[i]<like.lmax_kappacmb) {
+         if (ell[i]<like.lmax_kappacmb && ell[i]>like.lmin_kappacmb && ell[i] < like.lmax_shear) {
             data[start+(like.Ncl*nz)+i] = C_ks_sys(ell[i],nz);
          }
          else{
@@ -266,7 +251,7 @@ void set_data_ks(double *ell, double *data, int start)
 void set_data_kk(double *ell, double *data, int start)
 {
    for (int i=0; i<like.Ncl; i++){
-      if (ell[i]<like.lmax_kappacmb){
+      if (ell[i]<like.lmax_kappacmb && ell[i]>like.lmin_kappacmb){
          data[start+i] = C_kk_nointerp(ell[i]);
       }
       else{
@@ -277,15 +262,9 @@ void set_data_kk(double *ell, double *data, int start)
 
 void set_data_gy(double *ell, double *data, int start)
 {
-#ifdef ONESAMPLE
-  int nz=0;
-  for (int i=0; i<like.Ncl; i++) {data[start+(like.Ncl*nz)+i] = 0.;}
-  for (nz=1; nz<tomo.clustering_Nbin; nz++){
-#else
   for (int nz=0; nz<tomo.clustering_Nbin; nz++){
-#endif
     for (int i=0; i<like.Ncl; i++){
-       if (ell[i]<like.lmax_y && test_kmax(ell[i],nz)){
+       if (ell[i]<like.lmax_y && ell[i]>like.lmin_y && test_kmax(ell[i],nz)){
           data[start+(like.Ncl*nz)+i] = C_gy_nointerp(ell[i],nz);
        }
        else{
@@ -299,7 +278,7 @@ void set_data_sy(double *ell, double *data, int start)
 {
    for (int nz=0; nz<tomo.shear_Nbin; nz++){
       for (int i=0; i<like.Ncl; i++){
-         if (ell[i]<like.lmax_y) {
+         if (ell[i]<like.lmax_y && ell[i]>like.lmin_y && ell[i] < like.lmax_shear) {
             data[start+(like.Ncl*nz)+i] = C_sy_sys(ell[i],nz);
          }
          else{
@@ -312,7 +291,7 @@ void set_data_sy(double *ell, double *data, int start)
 void set_data_ky(double *ell, double *data, int start)
 {
    for (int i=0; i<like.Ncl; i++){
-      if (ell[i]<like.lmax_y && ell[i]<like.lmax_kappacmb){
+      if (ell[i]<like.lmax_y && ell[i]>like.lmin_y && ell[i]<like.lmax_kappacmb && ell[i]>like.lmin_kappacmb){
          data[start+i] = C_ky_nointerp(ell[i]);
       }
       else{
@@ -324,7 +303,7 @@ void set_data_ky(double *ell, double *data, int start)
 void set_data_yy(double *ell, double *data, int start)
 {
    for (int i=0; i<like.Ncl; i++){
-      if (ell[i]<like.lmax_y){
+      if (ell[i]<like.lmax_y && ell[i]>like.lmin_y){
          data[start+i] = C_yy_nointerp(ell[i]);
       }
       else{
@@ -636,14 +615,7 @@ void compute_data_vector(char *details, input_cosmo_params_local ic, input_nuisa
   set_nuisance_ia(in.A_ia,in.eta_ia);
   set_nuisance_gbias(in.bias);
   set_nuisance_gas(in.gas);
-  // set_nuisance_cluster_Mobs(mass_obs_norm,mass_obs_slope,mass_z_slope,mass_obs_scatter_norm,mass_obs_scatter_mass_slope,mass_obs_scatter_z_slope);
-        // clock_t t1, t2; double dt;
-        // t1=clock();
-        // double pktest = Pdelta(1e-3,0.1);
-        // t2=clock();
-        // dt = (double)(t2 - t1) / CLOCKS_PER_SEC;
-        // printf("time spent %le, %le\n",dt, pktest);exit(0);
-  // t2 = clock(); printf("setting: %le\n", (double)(t2-t1)/CLOCKS_PER_SEC); t1 = t2;
+
   int start=0;  
   if(like.shear_shear==1) {
     set_data_shear(ell, pred, start);
@@ -654,32 +626,28 @@ void compute_data_vector(char *details, input_cosmo_params_local ic, input_nuisa
     set_data_ggl(ell, pred, start);
     start=start+like.Ncl*tomo.ggl_Npowerspectra;
   }
-  // t2 = clock(); printf("ggl: %le\n", (double)(t2-t1)/CLOCKS_PER_SEC); t1 = t2;
   if(like.pos_pos==1){
     printf("clustering, start %d\n", start);
     set_data_clustering(ell,pred, start);
     start=start+like.Ncl*tomo.clustering_Npowerspectra;
   }
-  // t2 = clock(); printf("gg: %le\n", (double)(t2-t1)/CLOCKS_PER_SEC); t1 = t2;
 
   if(like.gk==1) {
     printf("Computing data vector: gk, start %d\n", start);
     set_data_gk(ell, pred, start);
     start += like.Ncl * tomo.clustering_Nbin;
   }
-  // t2 = clock(); printf("gk: %le\n", (double)(t2-t1)/CLOCKS_PER_SEC); t1 = t2;
   if(like.ks==1) {
     printf("Computing data vector: ks, start %d\n", start);
     set_data_ks(ell, pred, start);
     start += like.Ncl * tomo.shear_Nbin;
   }
-  // t2 = clock(); printf("ks: %le\n", (double)(t2-t1)/CLOCKS_PER_SEC); t1 = t2;
   if (like.kk) {
     printf("Computing data vector: kk, start %d\n", start);
     set_data_kk(ell, pred, start);
     start += like.Ncl;
   }
-  // t2 = clock(); printf("kk: %le\n", (double)(t2-t1)/CLOCKS_PER_SEC); t1 = t2;
+
   if (like.gy) {
     printf("Computing data vector: gy, start %d\n", start);
     set_data_gy(ell, pred, start);
@@ -715,25 +683,6 @@ void compute_data_vector(char *details, input_cosmo_params_local ic, input_nuisa
   fclose(F);
 
 }
-
-// double log_like_wrapper_1sample(input_cosmo_params_local ic, input_nuisance_params_local in) // Only used in sampling, not in datav
-// {
-//   double like = log_multi_like(ic.omega_m, ic.sigma_8, ic.n_s, ic.w0, ic.wa, ic.omega_b, ic.h0, ic.MGSigma, ic.MGmu,
-//     in.bias[0], in.bias[1], in.bias[2], in.bias[3],in.bias[4], in.bias[5], in.bias[6], in.bias[7],in.bias[8], in.bias[9], 
-//     in.source_z_bias[0], in.source_z_bias[1], in.source_z_bias[2], in.source_z_bias[3], in.source_z_bias[4], 
-//     in.source_z_bias[5], in.source_z_bias[6], in.source_z_bias[7], in.source_z_bias[8], in.source_z_bias[9], 
-//     in.source_z_s, 
-//     in.source_z_bias[0], in.source_z_bias[1], in.source_z_bias[2], in.source_z_bias[3], in.source_z_bias[4], 
-//     in.source_z_bias[5], in.source_z_bias[6], in.source_z_bias[7], in.source_z_bias[8], in.source_z_bias[9], 
-//     in.source_z_s, 
-//     in.shear_m[0], in.shear_m[1], in.shear_m[2], in.shear_m[3], in.shear_m[4], 
-//     in.shear_m[5], in.shear_m[6], in.shear_m[7], in.shear_m[8], in.shear_m[9], 
-//     in.A_ia, in.eta_ia,
-//     in.gas[0], in.gas[1], in.gas[2], in.gas[3], in.gas[4], in.gas[5], in.gas[6],
-//     in.gas[7], in.gas[8], in.gas[9], in.gas[10]);
-//   return like;
-// }
-
 
 void save_zdistr_sources(int zs){
   double z,dz =(redshift.shear_zdistrpar_zmax-redshift.shear_zdistrpar_zmin)/300.0;
