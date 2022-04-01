@@ -2,7 +2,7 @@ double invcov_read(int READ, int ci, int cj);
 double data_read(int READ, int ci);
 double bary_read(int READ, int PC, int cj);
 void init_data_inv_bary(char *INV_FILE, char *DATA_FILE, char *BARY_FILE);
-void init_priors(double M_Prior, double SigZ_source, double DeltaZ_source_Prior, double SigZ_source_Prior, double SigZ_lens, double DeltaZ_lens_Prior, double SigZ_lens_Prior, double A_IA_Prior, double betaIA_Prior, double etaIA_Prior, double etaZIA_Prior, double Q1_Prior, double Q2_Prior, double Q3_Prior);
+void init_priors(double M_Prior, double SigZ_source, double DeltaZ_source_Prior, double SigZ_source_Prior, double SigZ_lens, double DeltaZ_lens_Prior, double SigZ_lens_Prior, double A_IA_Prior, double etaIA_Prior);
 void init_survey(char *surveyname, double nsource, double nlens, double area);
 void init_galaxies(char *SOURCE_ZFILE, char *LENS_ZFILE, char *lensphotoz, char *sourcephotoz, char *tomo_binning_source, char *tomo_binning_lens);
 void init_cosmo_runmode(char *runmode);
@@ -168,7 +168,7 @@ void init_binning_fourier(int Ncl, double lmin, double lmax, double lmax_shear, 
 }
 
 
-void init_priors(double M_Prior, double SigZ_source, double DeltaZ_source_Prior, double SigZ_source_Prior, double SigZ_lens, double DeltaZ_lens_Prior, double SigZ_lens_Prior, double A_ia_Prior, double beta_ia_Prior, double eta_ia_Prior, double etaZ_ia_Prior, double Q1_Prior, double Q2_Prior, double Q3_Prior)
+void init_priors(double M_Prior, double SigZ_source, double DeltaZ_source_Prior, double SigZ_source_Prior, double SigZ_lens, double DeltaZ_lens_Prior, double SigZ_lens_Prior, double A_ia_Prior, double eta_ia_Prior)
 {
   int i;
 
@@ -208,27 +208,12 @@ void init_priors(double M_Prior, double SigZ_source, double DeltaZ_source_Prior,
   like.clphotoz=1;
 
   prior.A_ia[0]=5.92; 
-  prior.A_ia[1]=A_ia_Prior; 
-  
-  prior.beta_ia[0]=1.1; 
-  prior.beta_ia[1]=beta_ia_Prior; 
+  prior.A_ia[1]=A_ia_Prior;
   
   prior.eta_ia[0]=-0.47; 
   prior.eta_ia[1]=eta_ia_Prior; 
   
-  prior.eta_ia_highz[0]=0.0; 
-  prior.eta_ia_highz[1]=etaZ_ia_Prior; 
-  like.IA=1;
-
-  prior.bary_Q1[0]=0.0; 
-  prior.bary_Q1[1]=Q1_Prior; 
-
-  prior.bary_Q2[0]=0.0; 
-  prior.bary_Q2[1]=Q2_Prior; 
-
-  prior.bary_Q3[0]=0.0; 
-  prior.bary_Q3[1]=Q3_Prior; 
-  like.baryons=1;
+  like.IA=4;
 
 #ifdef NOMPP
   printf("\n");
@@ -252,16 +237,9 @@ void init_priors(double M_Prior, double SigZ_source, double DeltaZ_source_Prior,
   printf("---------------------------------------\n");
   printf("IA Priors\n");
   printf("A_IA=%le, A_IA_Prior=%le\n",prior.A_ia[0],prior.A_ia[1]);
-  printf("beta_ia=%le, betaIA_Prior=%le\n",prior.beta_ia[0],prior.beta_ia[1]);
   printf("eta_ia=%le, etaIA_Prior=%le\n",prior.eta_ia[0],prior.eta_ia[1]);
-  printf("eta_ia_highz=%le, etaZIA_Prior=%le\n",prior.eta_ia_highz[0],prior.eta_ia_highz[1]);
 
   printf("\n");
-  printf("---------------------------------------\n");
-  printf("Baryon Priors\n");
-  printf("Q1=%le, Sigma (Q1)=%le\n",prior.bary_Q1[0],prior.bary_Q1[1]);
-  printf("Q2=%le, Sigma (Q2)=%le\n",prior.bary_Q2[0],prior.bary_Q2[1]);
-  printf("Q3=%le, Sigma (Q3)=%le\n",prior.bary_Q3[0],prior.bary_Q3[1]);
 #endif
 }
  
@@ -685,8 +663,9 @@ void init_IA(char *model,char *lumfct)
     exit(1);
   }
   printf("SET IA MODEL=%s\n",model);
-  set_ia_priors();
+  
   if(like.IA!=4){
+    set_ia_priors();
     log_like_f_red();
   }
 }
