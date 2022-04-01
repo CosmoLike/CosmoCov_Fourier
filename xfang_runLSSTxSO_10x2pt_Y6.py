@@ -11,6 +11,7 @@ inv=['invcov_Y1_10x2pt','invcov_Y6_10x2pt']
 
 data=['10x2pt_LSSTxSO_Y1','10x2pt_LSSTxSO_Y6']
 
+mask=['...','mask_10x2pt.txt']
 # bary=['LPC_6x2pt_LSSTxSO_Y1','LPC_6x2pt_LSSTxSO_Y6']
 
 source_z=['src_LSSTY1','src_LSSTY6'] 
@@ -38,6 +39,7 @@ file_source_z = os.path.join(dirname, "zdistris/",source_z[model])
 file_lens_z = os.path.join(dirname, "zdistris/",lens_z[model])
 data_file = os.path.join(dirname, "datav/",data[model])
 cov_file = os.path.join(dirname, "cov/",inv[model])
+mask_file = os.path.join(dirname, "datav/",mask[model])
 #cov_file = os.path.join("/Users/timeifler/Dropbox/cosmolike_store/LSST_emu/inv/",inv[model])
 chain_file = os.path.join(dirname, "chains/LSSTxSO_10x2pt_model_%d" %model)
 # bary_file=os.path.join(dirname, "baryons/",bary[model])
@@ -55,7 +57,7 @@ initia("NLA_z".encode('utf-8'),"none".encode('utf-8'))
 #initpriors("none","none","none","Planck")
 #initpriors("none","none","none","random")
 initprobes("10x2pt".encode('utf-8'))
-initdatainv(cov_file.encode('utf-8') ,data_file.encode('utf-8'))
+initdatainv(cov_file.encode('utf-8'),data_file.encode('utf-8'),mask_file.encode('utf-8'))
 initcmb("so_Y5".encode('utf-8'))
 #sample_params= sample_cosmology_only()
 sample_params = sample_cosmology_10x2_allsys(get_N_tomo_shear(),get_N_tomo_clustering())

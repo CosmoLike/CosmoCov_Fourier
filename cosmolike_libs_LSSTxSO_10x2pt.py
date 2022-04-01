@@ -40,8 +40,8 @@ initprobes.argtypes=[ctypes.c_char_p]
 initcmb=lib.init_cmb
 initcmb.argtypes=[ctypes.c_char_p]
 
-initdatainv=lib.init_data_inv
-initdatainv.argtypes=[ctypes.c_char_p,ctypes.c_char_p]
+initdatainv=lib.init_data_inv_mask
+initdatainv.argtypes=[ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
 
 get_N_tomo_shear = lib.get_N_tomo_shear
 get_N_tomo_shear.argtypes = []

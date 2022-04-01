@@ -535,10 +535,13 @@ double log_multi_like(input_cosmo_params_local ic, input_nuisance_params_local i
 
   chisqr=0.0;
   for (i=0; i<like.Ndata; i++){
-    for (j=0; j<like.Ndata; j++){
-      a=(pred[i]-data_read(1,i))*invcov_read(1,i,j)*(pred[j]-data_read(1,j));
-      //a=(pred[i]-data_read(1,i))*invcov_read(1,i,j)*(pred[j]-data_read(1,j));
-      chisqr=chisqr+a;
+    if(dvmask_read(1,i)){
+      for (j=0; j<like.Ndata; j++){
+        if(dvmask_read(1,j)){
+          a=(pred[i]-data_read(1,i))*invcov_read(1,i,j)*(pred[j]-data_read(1,j));
+          chisqr += a;
+        }
+      }
     }
     // if (fabs(data_read(1,i)) < 1.e-25){
     //    printf("%d %le %le %le\n",i,data_read(1,i),pred[i],invcov_read(1,i,i));

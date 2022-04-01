@@ -1,7 +1,9 @@
 double invcov_read(int READ, int ci, int cj);
 double data_read(int READ, int ci);
 double bary_read(int READ, int PC, int cj);
+int dvmask_read(int READ, int ci);
 void init_data_inv(char *INV_FILE, char *DATA_FILE);
+void init_data_inv_mask(char *INV_FILE, char *DATA_FILE, char *MASK_FILE);
 void init_data_inv_bary(char *INV_FILE, char *DATA_FILE, char *BARY_FILE);
 void init_priors(double M_Prior, double SigZ_source, double DeltaZ_source_Prior, double SigZ_source_Prior, double SigZ_lens, double DeltaZ_lens_Prior, double SigZ_lens_Prior);
 void init_survey(char *surveyname, double nsource, double nlens, double area);
@@ -70,6 +72,26 @@ void init_data_inv(char *INV_FILE, char *DATA_FILE)
   init=invcov_read(0,1,1);
 }
 
+void init_data_inv_mask(char *INV_FILE, char *DATA_FILE, char *MASK_FILE)
+{
+  double init;
+  int initmask;
+  printf("\n");
+  printf("---------------------------------------\n");
+  printf("Initializing data vector and covariance\n");
+  printf("---------------------------------------\n");
+
+  sprintf(like.INV_FILE,"%s",INV_FILE);
+  printf("PATH TO INVCOV: %s\n",like.INV_FILE);
+  sprintf(like.DATA_FILE,"%s",DATA_FILE);
+  printf("PATH TO DATA: %s\n",like.DATA_FILE);
+  sprintf(like.MASK_FILE,"%s",MASK_FILE);
+  printf("PATH TO MASK: %s\n",like.MASK_FILE);
+  init=data_read(0,1);
+  init=invcov_read(0,1,1);
+  initmask=dvmask_read(0,1);
+}
+
 void init_data_inv_bary(char *INV_FILE, char *DATA_FILE, char *BARY_FILE)
 {
   double init;
@@ -121,6 +143,25 @@ double data_read(int READ, int ci)
     F=fopen(like.DATA_FILE,"r");
     for (i=0;i<like.Ndata; i++){  
       fscanf(F,"%d %le\n",&intspace,&data[i]);
+    }
+    fclose(F);
+    printf("FINISHED READING DATA VECTOR\n");
+  }    
+  return data[ci];
+}
+
+
+int dvmask_read(int READ, int ci)
+{
+  int i,intspace;
+  static int *data = 0;
+  
+  if(READ==0 || data ==0){
+    data  = create_double_vector(0, like.Ndata-1);      
+    FILE *F;
+    F=fopen(like.MASK_FILE,"r");
+    for (i=0;i<like.Ndata; i++){  
+      fscanf(F,"%d %d\n",&intspace,&data[i]);
     }
     fclose(F);
     printf("FINISHED READING DATA VECTOR\n");
