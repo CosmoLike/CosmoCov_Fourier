@@ -845,7 +845,7 @@ void save_zdistr_lenses(int zl){
   p_cosmo = (input_cosmo_params_local) {0.3156,0.831,0.9645,-1.,0.,0.0491685,0.6727,0.,0.};
   // p_cosmo = (input_cosmo_params_local) {0.3,0.8281663873060578,0.97,-1.,0.,0.05,0.7,0.,0.};
   p_sys = (input_nuisance_params_local) {.source_z_s=sigma_zphot_shear[sce], .lens_z_s=sigma_zphot_clustering[sce], \
-                                         .A_ia=5.92, .eta_ia=-0.47};
+                                         .A_ia=0.5, .eta_ia=0.};
   double p_gas[11] = {1.17,0.6,14.,1.,0.03,12.5,1.2,\
                       6.5,0.752,0.,0.};
   // double p_gas[11] = {1.17702,0.6,13.59369,0.84710,0.0330,12.4479,1.2,\

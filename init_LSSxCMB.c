@@ -207,10 +207,10 @@ void init_priors(double M_Prior, double SigZ_source, double DeltaZ_source_Prior,
   }
   like.clphotoz=1;
 
-  prior.A_ia[0]=5.92; 
+  prior.A_ia[0]=0.5; 
   prior.A_ia[1]=A_ia_Prior;
   
-  prior.eta_ia[0]=-0.47; 
+  prior.eta_ia[0]=0.; 
   prior.eta_ia[1]=eta_ia_Prior; 
   
   like.IA=4;
@@ -663,7 +663,7 @@ void init_IA(char *model,char *lumfct)
     exit(1);
   }
   printf("SET IA MODEL=%s\n",model);
-  
+
   if(like.IA!=4){
     set_ia_priors();
     log_like_f_red();
