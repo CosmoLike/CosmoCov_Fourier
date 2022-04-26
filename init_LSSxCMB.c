@@ -11,7 +11,7 @@ void init_galaxies(char *SOURCE_ZFILE, char *LENS_ZFILE, char *lensphotoz, char 
 void init_cosmo_runmode(char *runmode);
 void init_binning_fourier(int Ncl, double lmin, double lmax, double lmax_shear, double Rmin_bias, int Ntomo_source, int Ntomo_lens);
 void init_probes(char *probes);
-
+void init_feedback(int on);
 
 void init_lens_sample(char *lensphotoz, char *tomo_binning_lens);
 void init_source_sample(char *sourcephotoz, char *tomo_binning_source);
@@ -55,6 +55,11 @@ int count_rows(char* filename,const char delimiter){
    return count;
 }
 
+void init_feedback(int on){
+  if(on==1) {like.feedback_on = 1;}
+  else if(on==0) {like.feedback_on = 0;}
+  else {printf("unsupported init_feedback!\n"); exit(1);}
+}
 
 void init_data_inv(char *INV_FILE, char *DATA_FILE)
 {

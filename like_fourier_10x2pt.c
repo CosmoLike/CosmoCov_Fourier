@@ -82,7 +82,11 @@ typedef struct input_nuisance_params_local {
     double shear_m[10];
     double A_ia;
     double eta_ia;
+#ifdef TEST_CALIB
+    double gas[15];
+#else
     double gas[11];
+#endif
 } input_nuisance_params_local;
 
 void print_cosmo_params(input_cosmo_params_local ic);
@@ -398,6 +402,35 @@ int set_nuisance_gas(double *p_gas)
    nuisance.gas_f_H=p_gas[8];
    nuisance.gas_eps1=p_gas[9];
    nuisance.gas_eps2=p_gas[10];
+   if (nuisance.gas_Gamma_KS < 1.05 || nuisance.gas_Gamma_KS > 1.35) return 0;
+   if (nuisance.gas_beta < 0.2 || nuisance.gas_beta > 1.0) return 0;
+   if (nuisance.gas_lgM0 < 12.5 || nuisance.gas_lgM0 > 15.0) return 0;
+   if (nuisance.gas_alpha < 0.5 || nuisance.gas_alpha > 1.5) return 0;
+
+   if (nuisance.gas_lgT_w < 6.0 || nuisance.gas_lgT_w > 7.0) return 0;
+   if (nuisance.gas_eps1 < -0.3 || nuisance.gas_eps1 > 0.3) return 0;
+   if (nuisance.gas_eps2 < -0.3 || nuisance.gas_eps2 > 0.0) return 0;
+
+   // need to check the ranges below if they are varied
+   if (nuisance.gas_lgM_star < 12.0 || nuisance.gas_lgM_star > 14.0) return 0;
+   if (nuisance.gas_sigma_star < 1.0 || nuisance.gas_sigma_star > 1.5) return 0;
+   if (nuisance.gas_A_star < 0.02 || nuisance.gas_A_star > 0.04) return 0;
+   if (nuisance.gas_f_H < 0.7 || nuisance.gas_f_H > 0.8) return 0;
+
+#ifdef TEST_CALIB
+   nuisance.gas_beta_v2=p_gas[11];
+   nuisance.gas_lgM0_v2=p_gas[12];
+   nuisance.gas_eps1_v2=p_gas[13];
+   nuisance.gas_eps2_v2=p_gas[14];
+
+   if (nuisance.gas_beta_v2 < 0.2 || nuisance.gas_beta_v2 > 1.0) return 0;
+   if (nuisance.gas_lgM0_v2 < 12.5 || nuisance.gas_lgM0_v2 > 15.0) return 0;
+   if (nuisance.gas_eps1_v2 < -0.3 || nuisance.gas_eps1_v2 > 0.3) return 0;
+   if (nuisance.gas_eps2_v2 < -0.3 || nuisance.gas_eps2_v2 > 0.0) return 0;
+
+#endif
+
+
 return 1;
 }
 
@@ -454,7 +487,7 @@ double log_multi_like(input_cosmo_params_local ic, input_nuisance_params_local i
     return -1.0e15;
   }
        
-  printf("like %le %le %le %le %le %le %le %le\n",cosmology.Omega_m, cosmology.Omega_v,cosmology.sigma_8,cosmology.n_spec,cosmology.w0,cosmology.wa,cosmology.omb,cosmology.h0); 
+  printf("like: %le %le %le %le %le %le %le %le\n",cosmology.Omega_m, cosmology.Omega_v,cosmology.sigma_8,cosmology.n_spec,cosmology.w0,cosmology.wa,cosmology.omb,cosmology.h0); 
   // printf("like %le %le %le %le\n",gbias.b[0][0], gbias.b[1][0], gbias.b[2][0], gbias.b[3][0]);    
   // for (i=0; i<10; i++){
   //   printf("nuisance %le %le %le\n",nuisance.shear_calibration_m[i],nuisance.bias_zphot_shear[i],nuisance.sigma_zphot_shear[i]);
@@ -472,12 +505,12 @@ double log_multi_like(input_cosmo_params_local ic, input_nuisance_params_local i
   if(like.wlphotoz!=0) log_L_prior+=log_L_wlphotoz();
   if(like.clphotoz!=0) log_L_prior+=log_L_clphotoz();
   if(like.shearcalib==1) log_L_prior+=log_L_shear_calib();
-  if(like.IA!=0) {
-    log_L = 0.0;
-    log_L -= pow((nuisance.A_ia - prior.A_ia[0])/prior.A_ia[1],2.0);
-    log_L -= pow((nuisance.eta_ia - prior.eta_ia[0])/prior.eta_ia[1],2.0);
-    log_L_prior+=0.5*log_L;
-  }
+  // if(like.IA!=0) {
+  //   log_L = 0.0;
+  //   log_L -= pow((nuisance.A_ia - prior.A_ia[0])/prior.A_ia[1],2.0);
+  //   log_L -= pow((nuisance.eta_ia - prior.eta_ia[0])/prior.eta_ia[1],2.0);
+  //   log_L_prior+=0.5*log_L;
+  // }
  
   // if(like.clusterMobs==1) log_L_prior+=log_L_clusterMobs();
  
@@ -556,7 +589,7 @@ double log_multi_like(input_cosmo_params_local ic, input_nuisance_params_local i
     print_cosmo_params(ic);
     print_nuisance_params(in);
   }
-  printf("%le\n",chisqr);
+  // printf("chisqr, log_L_prior: %le, %le\n",chisqr, log_L_prior);
   log_L = -0.5*chisqr+log_L_prior;
   if(log_L < -1.0e15 || isnan(log_L)) {return -1.0e15;}
   return log_L;
@@ -582,7 +615,12 @@ void print_nuisance_params(input_nuisance_params_local in){
   printf("\n");
   printf("IA (A, eta): %le, %le\n", in.A_ia, in.eta_ia);
   printf("gas: ");
-  for(int i=0; i<11; i++){ printf("%le, ", in.gas[i]); }
+#ifdef TEST_CALIB
+  int N_gaspara = 15;
+#else
+  int N_gaspara = 11;
+#endif
+  for(int i=0; i<N_gaspara; i++){ printf("%le, ", in.gas[i]); }
   printf("\n");
 }
 
@@ -773,7 +811,7 @@ void save_zdistr_lenses(int zl){
   init_probes("10x2pt");
   init_cmb(cmb_yr[sce]);
 
-  like.feedback_on = 1;
+  init_feedback(1);
 
 #ifdef ONESAMPLE
   sprintf(arg3,"%s_1sample",survey_designation[sce]);
@@ -788,10 +826,12 @@ void save_zdistr_lenses(int zl){
   // p_cosmo = (input_cosmo_params_local) {0.3,0.8281663873060578,0.97,-1.,0.,0.05,0.7,0.,0.};
   p_sys = (input_nuisance_params_local) {.source_z_s=sigma_zphot_shear[sce], .lens_z_s=sigma_zphot_clustering[sce], \
                                          .A_ia=0.5, .eta_ia=0.};
-  double p_gas[11] = {1.17,0.6,14.,1.,0.03,12.5,1.2,\
-                      6.5,0.752,0.,0.};
-  // double p_gas[11] = {1.17702,0.6,13.59369,0.84710,0.0330,12.4479,1.2,\
-  //                     6.65445,0.752,-0.10650,0.}; // HMCODE test T_AGN=1e7.8 K
+  double p_gas[15] = {1.17,0.6,14.,1.,0.03,12.5,1.2,\
+                      6.5,0.752,0.,0.,\
+                      0.6,14.,0.,0.}; // last 4 for are param_v2 for TEST_CALIB, not used in regular run
+  // double p_gas[15] = {1.17702,0.6,13.59369,0.84710,0.0330,12.4479,1.2,\
+  //                     6.65445,0.752,-0.10650,0.,\
+                         0.6,13.59369,-0.10650,0.}; // HMCODE test T_AGN=1e7.8 K
 
 
   for(i=0;i<10;i++){
@@ -800,7 +840,11 @@ void save_zdistr_lenses(int zl){
     p_sys.lens_z_bias[i] = 0.;
     p_sys.shear_m[i] = 0.;
   }
+#ifdef TEST_CALIB
+  for(i=0;i<15;i++){
+#else
   for(i=0;i<11;i++){
+#endif
     p_sys.gas[i] = p_gas[i];
   }
 

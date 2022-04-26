@@ -9,7 +9,7 @@ import mpi4py
 # from mpp_blinding import seed as blinding_seed
 
 dirname = os.path.split(__file__)[0]
-lib_name = os.path.join(dirname, "like_fourier_10x2pt_fft.so")
+lib_name = os.path.join(dirname, "like_fourier_10x2pt_fft_calib.so")
 lib=ctypes.cdll.LoadLibrary(lib_name)
 double = ctypes.c_double
 
@@ -238,7 +238,7 @@ class InputNuisanceParams(IterableStruct):
         ("shear_m", double*10),
         ("A_ia", double),
         ("eta_ia", double),
-        ("gas", double*11)
+        ("gas", double*15)
     ]
     @classmethod
     def fiducial(cls):
@@ -252,7 +252,8 @@ class InputNuisanceParams(IterableStruct):
         c.A_ia = 0.5
         c.eta_ia = 0.
         c.gas[:] = [1.17,0.6,14.,1.,0.03,12.5,1.2,\
-                    6.5,0.752,0.,0.]
+                    6.5,0.752,0.,0.,\
+                    0.6,14.,0.,0.]
         return c
 
     @classmethod
@@ -267,7 +268,8 @@ class InputNuisanceParams(IterableStruct):
         c.A_ia = 0.1
         c.eta_ia = 0.1
         c.gas[:] = [0.01,0.01,0.05,0.05,0.001,0.5,0.05,\
-                    0.05,0.05,0.05,0.05]
+                    0.05,0.05,0.05,0.05,\
+                    0.01,0.05,0.05,0.05]
         return c
 
 
@@ -333,7 +335,7 @@ def sample_cosmology_10x2_allsys(tomo_N_shear,tomo_N_lens,MG = False):
     varied_parameters.append('A_ia')
     varied_parameters.append('eta_ia')
 
-    i_gas = [0,1,2,3,7,9,10] # select gas parameters to vary
+    i_gas = [0,1,2,3,7,9,10,11,12,13,14] # select gas parameters to vary
     varied_parameters += ['gas_%d'%i for i in i_gas]
     return varied_parameters
 
