@@ -243,7 +243,7 @@ class InputNuisanceParams(IterableStruct):
     @classmethod
     def fiducial(cls):
         c = cls()
-        c.bias[:] = [1.2,1.3,1.38,1.46,1.54,1.63,1.72,1.83,1.94,2.08]
+        c.bias[:] = [1.202462,1.313657,1.406308,1.493877,1.580479,1.668860,1.761558,1.860530,1.968723,2.090681]
         c.source_z_bias[:] = np.repeat(0.0, 10)
         c.source_z_s = 0.05
         c.lens_z_bias[:] = np.repeat(0.0, 10)
@@ -267,7 +267,7 @@ class InputNuisanceParams(IterableStruct):
         c.A_ia = 0.1
         c.eta_ia = 0.1
         c.gas[:] = [0.01,0.01,0.05,0.05,0.001,0.5,0.05,\
-                    0.05,0.05,0.05,0.05]
+                    0.05,0.01,0.05,0.05]
         return c
 
 
@@ -333,7 +333,22 @@ def sample_cosmology_10x2_allsys(tomo_N_shear,tomo_N_lens,MG = False):
     varied_parameters.append('A_ia')
     varied_parameters.append('eta_ia')
 
-    i_gas = [0,1,2,3,7,9,10] # select gas parameters to vary
+    i_gas = [0,1,2,3, 7,8,9,10] # select gas parameters to vary
+    varied_parameters += ['gas_%d'%i for i in i_gas]
+    return varied_parameters
+
+def sample_cosmology_10x2_allsys_fix_phz(tomo_N_shear,tomo_N_lens,MG = False):
+    varied_parameters = sample_cosmology_only(MG)
+    varied_parameters += ['bias_%d'%i for i in range(tomo_N_lens)]
+    varied_parameters += ['source_z_bias_%d'%i for i in range(tomo_N_shear)]
+    varied_parameters.append('source_z_s')
+    varied_parameters += ['lens_z_bias_%d'%i for i in range(tomo_N_lens)]
+    varied_parameters.append('lens_z_s')
+    varied_parameters += ['shear_m_%d'%i for i in range(tomo_N_shear)]
+    varied_parameters.append('A_ia')
+    varied_parameters.append('eta_ia')
+
+    i_gas = [0,1,2,3, 7,8,9,10] # select gas parameters to vary
     varied_parameters += ['gas_%d'%i for i in i_gas]
     return varied_parameters
 

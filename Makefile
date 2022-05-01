@@ -22,6 +22,9 @@ home_cov_102pt:
 home_cov_102pt_slow:
 	gcc compute_covariances_fourier_10x2pt.c -o ./compute_covariances_fourier_10x2pt_slow $(opt_home) -DSLOW
 
+home_cov_102pt_fft:
+	gcc compute_covariances_fourier_10x2pt.c $(cfftlog) -DRUN_FFT -o ./compute_covariances_fourier_10x2pt_fft $(opt_home)
+
 
 home_cov_1sample:
 	gcc compute_covariances_fourier.c -o ./compute_covariances_fourier_1sample $(opt_home) -DONESAMPLE
@@ -63,6 +66,9 @@ puma_cov:
 
 puma_cov_102pt:
 	gcc compute_covariances_fourier_10x2pt.c -o ./compute_covariances_fourier_10x2pt $(opt_puma)
+
+puma_cov_102pt_fft:
+	gcc compute_covariances_fourier_10x2pt.c $(cfftlog) -DRUN_FFT -o ./compute_covariances_fourier_10x2pt_fft $(opt_puma)
 
 puma_cov_102pt_ssc:
 	gcc compute_covariances_fourier_10x2pt_ssc.c -o ./compute_covariances_fourier_10x2pt_ssc $(opt_puma)

@@ -230,6 +230,9 @@ int main(int argc, char** argv)
 #ifdef SLOW
   sprintf(covparams.outdir,"out_cov_lsstxso_10x2pt_slow/");
 #endif
+#ifdef RUN_FFT
+  sprintf(covparams.outdir,"out_cov_lsstxso_10x2pt_fft/");
+#endif
 
   printf("----------------------------------\n");
   char ABCD[2][4];
