@@ -11,6 +11,10 @@
 
 #include <fftw3.h>
 
+
+#include "../cosmolike_core/cfftlog/cfftlog.h"
+#include "../cosmolike_core/cfftlog/utils.h"
+
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_sf_erf.h>
 #include <gsl/gsl_integration.h>
@@ -48,6 +52,7 @@
 
 #include "init_LSSxCMB.c"
 
+#include "../cosmolike_core/cfftlog/utils_complex.h"
 // Naming convention:
 // l = galaxy positions ("l" as in "lens sample")
 // k = kappa CMB ("k" as in "kappa")
