@@ -312,52 +312,42 @@ log_multi_like = lib.log_multi_like
 lib.compute_data_vector.argtypes = [ctypes.c_char_p, InputCosmologyParams, InputNuisanceParams]
 compute_data_vector = lib.compute_data_vector
 
-def sample_cosmology_only(MG = False):
-    if MG:
-        varied_parameters = InputCosmologyParams().names()
-    else:
-        varied_parameters = ['omega_m']
-        varied_parameters.append('sigma_8')
-        varied_parameters.append('n_s')
+def sample_cosmology_only(MG = False, w0wa = False):
+
+    varied_parameters = ['omega_m']
+    varied_parameters.append('sigma_8')
+    varied_parameters.append('n_s')
+
+    if(w0wa):
         varied_parameters.append('w0')
         varied_parameters.append('wa')
-        varied_parameters.append('omega_b')
-        varied_parameters.append('h0')
+
+    varied_parameters.append('omega_b')
+    varied_parameters.append('h0')
+
+    if(MG):
+        varied_parameters.append('MGSigma')
+        varied_parameters.append('MGmu')
 
     return varied_parameters
 
 
-def sample_cosmology_10x2_allsys(tomo_N_shear,tomo_N_lens,MG = False):
-    varied_parameters = sample_cosmology_only(MG)
+def sample_cosmology_10x2_allsys(tomo_N_shear,tomo_N_lens,MG = False, w0wa=False, cov_modified=False):
+    varied_parameters = sample_cosmology_only(MG,w0wa)
     varied_parameters += ['bias_%d'%i for i in range(tomo_N_lens)]
-    varied_parameters += ['source_z_bias_%d'%i for i in range(tomo_N_shear)]
-    varied_parameters.append('source_z_s')
-    varied_parameters += ['lens_z_bias_%d'%i for i in range(tomo_N_lens)]
-    varied_parameters.append('lens_z_s')
-    varied_parameters += ['shear_m_%d'%i for i in range(tomo_N_shear)]
+    if cov_modified is False:
+        varied_parameters += ['source_z_bias_%d'%i for i in range(tomo_N_shear)]
+        varied_parameters.append('source_z_s')
+        varied_parameters += ['lens_z_bias_%d'%i for i in range(tomo_N_lens)]
+        varied_parameters.append('lens_z_s')
+        varied_parameters += ['shear_m_%d'%i for i in range(tomo_N_shear)]
+
     varied_parameters.append('A_ia')
     varied_parameters.append('eta_ia')
 
     i_gas = [0,1,2,3, 7,8,9,10] # select gas parameters to vary
     varied_parameters += ['gas_%d'%i for i in i_gas]
     return varied_parameters
-
-def sample_cosmology_10x2_allsys_fix_phz(tomo_N_shear,tomo_N_lens,MG = False):
-    varied_parameters = sample_cosmology_only(MG)
-    varied_parameters += ['bias_%d'%i for i in range(tomo_N_lens)]
-    varied_parameters += ['source_z_bias_%d'%i for i in range(tomo_N_shear)]
-    varied_parameters.append('source_z_s')
-    varied_parameters += ['lens_z_bias_%d'%i for i in range(tomo_N_lens)]
-    varied_parameters.append('lens_z_s')
-    varied_parameters += ['shear_m_%d'%i for i in range(tomo_N_shear)]
-    varied_parameters.append('A_ia')
-    varied_parameters.append('eta_ia')
-
-    i_gas = [0,1,2,3, 7,8,9,10] # select gas parameters to vary
-    varied_parameters += ['gas_%d'%i for i in i_gas]
-    return varied_parameters
-
-
 
 
 def sample_main(varied_parameters,sigma_z_shear,sigma_z_clustering, iterations, nwalker, nthreads, filename, blind=False, pool=None):

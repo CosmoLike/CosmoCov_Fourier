@@ -66,7 +66,7 @@ initcmb("so_Y5".encode('utf-8'))
 skip_shearcalib_phz_sampling()
 
 #sample_params= sample_cosmology_only()
-sample_params = sample_cosmology_10x2_allsys(get_N_tomo_shear(),get_N_tomo_clustering(),MG = False, cov_modified = True)
+sample_params = sample_cosmology_10x2_allsys(get_N_tomo_shear(),get_N_tomo_clustering(), MG=False, w0wa=False, cov_modified=True)
 
 Nwalker = int(sys.argv[1])
 sample_main(sample_params,sigma_z_shear[model],sigma_z_clustering[model],8000,Nwalker,1,chain_file, blind=False, pool=MPIPool())

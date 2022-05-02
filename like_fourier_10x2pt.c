@@ -591,6 +591,7 @@ double log_multi_like(input_cosmo_params_local ic, input_nuisance_params_local i
   }
   // printf("chisqr, log_L_prior: %le, %le\n",chisqr, log_L_prior);
   log_L = -0.5*chisqr+log_L_prior;
+  printf("log_L: %le\n",log_L);
   if(log_L < -1.0e15 || isnan(log_L)) {return -1.0e15;}
   return log_L;
 }
