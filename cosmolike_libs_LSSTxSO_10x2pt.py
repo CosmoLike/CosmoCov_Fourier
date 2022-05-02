@@ -62,6 +62,8 @@ get_N_ell = lib.get_N_ell
 get_N_ell.argtypes = []
 get_N_ell.restype = ctypes.c_int
 
+skip_shearcalib_phz_sampling = lib.skip_shearcalib_phz_sampling
+skip_shearcalib_phz_sampling.argtypes = []
 
 # lib.initialize_all_wrapper.restype = ctypes.c_int
 # lib.initialize_all_wrapper.argtypes = [
@@ -306,6 +308,9 @@ class LikelihoodFunctionWrapper(object):
 lib.log_multi_like.argtypes = [InputCosmologyParams, InputNuisanceParams]
 lib.log_multi_like.restype = double
 log_multi_like = lib.log_multi_like
+
+lib.compute_data_vector.argtypes = [ctypes.c_char_p, InputCosmologyParams, InputNuisanceParams]
+compute_data_vector = lib.compute_data_vector
 
 def sample_cosmology_only(MG = False):
     if MG:

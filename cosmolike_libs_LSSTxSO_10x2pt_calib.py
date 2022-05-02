@@ -62,6 +62,8 @@ get_N_ell = lib.get_N_ell
 get_N_ell.argtypes = []
 get_N_ell.restype = ctypes.c_int
 
+skip_shearcalib_phz_sampling = lib.skip_shearcalib_phz_sampling
+skip_shearcalib_phz_sampling.argtypes = []
 
 # lib.initialize_all_wrapper.restype = ctypes.c_int
 # lib.initialize_all_wrapper.argtypes = [
@@ -309,6 +311,9 @@ lib.log_multi_like.argtypes = [InputCosmologyParams, InputNuisanceParams]
 lib.log_multi_like.restype = double
 log_multi_like = lib.log_multi_like
 
+lib.compute_data_vector.argtypes = [ctypes.c_char_p, InputCosmologyParams, InputNuisanceParams]
+compute_data_vector = lib.compute_data_vector
+
 def sample_cosmology_only(MG = False):
     if MG:
         varied_parameters = InputCosmologyParams().names()
@@ -324,14 +329,16 @@ def sample_cosmology_only(MG = False):
     return varied_parameters
 
 
-def sample_cosmology_10x2_allsys(tomo_N_shear,tomo_N_lens,MG = False):
+def sample_cosmology_10x2_allsys(tomo_N_shear,tomo_N_lens,MG = False, cov_modified = False):
     varied_parameters = sample_cosmology_only(MG)
     varied_parameters += ['bias_%d'%i for i in range(tomo_N_lens)]
-    varied_parameters += ['source_z_bias_%d'%i for i in range(tomo_N_shear)]
-    varied_parameters.append('source_z_s')
-    varied_parameters += ['lens_z_bias_%d'%i for i in range(tomo_N_lens)]
-    varied_parameters.append('lens_z_s')
-    varied_parameters += ['shear_m_%d'%i for i in range(tomo_N_shear)]
+    if cov_modified is False:
+        varied_parameters += ['source_z_bias_%d'%i for i in range(tomo_N_shear)]
+        varied_parameters.append('source_z_s')
+        varied_parameters += ['lens_z_bias_%d'%i for i in range(tomo_N_lens)]
+        varied_parameters.append('lens_z_s')
+        varied_parameters += ['shear_m_%d'%i for i in range(tomo_N_shear)]
+        
     varied_parameters.append('A_ia')
     varied_parameters.append('eta_ia')
 
