@@ -567,12 +567,16 @@ double log_multi_like(input_cosmo_params_local ic, input_nuisance_params_local i
   }
 
   chisqr=0.0;
+  double invcov_i=0;
+  double chisqr_diag=0.0;
   for (i=0; i<like.Ndata; i++){
     if(dvmask_read(1,i)){
-      for (j=0; j<like.Ndata; j++){
+      for (j=0; j<=i; j++){
         if(dvmask_read(1,j)){
-          a=(pred[i]-data_read(1,i))*invcov_read(1,i,j)*(pred[j]-data_read(1,j));
+          a=(pred[i]-data_read(1,i))*invcov_read_economic(1,invcov_i)*(pred[j]-data_read(1,j));
           chisqr += a;
+          if(i==j) {chisqr_diag += a;}
+          invcov_i++;
         }
       }
     }
@@ -580,6 +584,8 @@ double log_multi_like(input_cosmo_params_local ic, input_nuisance_params_local i
     //    printf("%d %le %le %le\n",i,data_read(1,i),pred[i],invcov_read(1,i,i));
     // }
   }
+  chisqr = 2.*chisqr - chisqr_diag;
+
   // t2 = clock(); printf("chisqr: %le\n", (double)(t2-t1)/CLOCKS_PER_SEC); t1 = t2;
   if (chisqr<0.0){
     printf("error: chisqr = %le\n",chisqr);

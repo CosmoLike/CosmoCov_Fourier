@@ -1,4 +1,6 @@
 double invcov_read(int READ, int ci, int cj);
+int get_Ndata_used();
+double invcov_read_economic(int READ, int ci);
 double data_read(int READ, int ci);
 double bary_read(int READ, int PC, int cj);
 int dvmask_read(int READ, int ci);
@@ -100,7 +102,8 @@ void init_data_inv_mask(char *INV_FILE, char *DATA_FILE, char *MASK_FILE)
   sprintf(like.MASK_FILE,"%s",MASK_FILE);
   printf("PATH TO MASK: %s\n",like.MASK_FILE);
   init=data_read(0,1);
-  init=invcov_read(0,1,1);
+  // init=invcov_read(0,1,1);
+  init=invcov_read_economic(0,1);
   initmask=dvmask_read(0,1);
 }
 
@@ -141,6 +144,47 @@ double invcov_read(int READ, int ci, int cj)
    printf("FINISHED READING COVARIANCE\n");
  }    
  return inv[ci][cj];
+}
+
+int get_Ndata_used(){
+  int i;
+  int N_masked=0;
+  static int N_used=-1;
+  if(N_used==-1){
+    for(i=0; i<like.Ndata; i++) {
+      if(dvmask_read(1,i)==0) N_masked++;
+    }
+    N_used = like.Ndata - N_masked;
+  }
+  return N_used;
+}
+
+double invcov_read_economic(int READ, int ci)
+{
+  int i,j,intspace;
+  static double *inv =0;
+  int N_used;
+
+  N_used = get_Ndata_used();
+
+  if(READ==0 || inv == 0){
+    inv = create_double_vector(0, N_used*(N_used+1)/2-1); // Only store the lower-left triangle of the cov
+    FILE *F;
+    F=fopen(like.INV_FILE,"r");
+    double dummy;
+    int k=0, dvmask_i;
+    for (i=0;i<like.Ndata; i++){
+      dvmask_i = dvmask_read(1,i);
+      for (j=0;j<like.Ndata; j++){
+       fscanf(F,"%d %d %le\n",&intspace,&intspace,&dummy);
+       if(dvmask_i*dvmask_read(1,j)*(j<=i)) inv[k++] = dummy;
+      }
+    }
+    fclose(F);
+    printf("FINISHED READING COVARIANCE\n");
+  }
+
+  return inv[ci];
 }
 
 
