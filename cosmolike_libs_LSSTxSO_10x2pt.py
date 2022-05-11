@@ -218,7 +218,7 @@ class InputCosmologyParams(IterableStruct):
         c = cls()
         c.omega_m = 0.02
         c.sigma_8 = 0.02
-        c.n_s = 0.05
+        c.n_s = 0.01
         c.w0 = 0.1
         c.wa = 0.1
         c.omega_b = 0.001
