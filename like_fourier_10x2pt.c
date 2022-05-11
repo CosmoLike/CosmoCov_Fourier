@@ -571,7 +571,7 @@ double log_multi_like(input_cosmo_params_local ic, input_nuisance_params_local i
   double chisqr_diag=0.0;
   for (i=0; i<like.Ndata; i++){
     if(dvmask_read(1,i)){
-      for (j=0; j<=i; j++){
+      for (j=0; j<=i; j++){ // Only need lower-left triangle of invcov
         if(dvmask_read(1,j)){
           a=(pred[i]-data_read(1,i))*invcov_read_economic(1,invcov_i)*(pred[j]-data_read(1,j));
           chisqr += a;
