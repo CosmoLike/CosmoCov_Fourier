@@ -216,9 +216,9 @@ class InputCosmologyParams(IterableStruct):
     @classmethod
     def fiducial_sigma(cls):
         c = cls()
-        c.omega_m = 0.01
-        c.sigma_8 = 0.01
-        c.n_s = 0.01
+        c.omega_m = 0.02
+        c.sigma_8 = 0.02
+        c.n_s = 0.05
         c.w0 = 0.1
         c.wa = 0.1
         c.omega_b = 0.001
