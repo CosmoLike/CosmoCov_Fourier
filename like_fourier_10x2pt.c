@@ -408,8 +408,8 @@ int set_nuisance_gas(double *p_gas)
    if (nuisance.gas_alpha < 0.5 || nuisance.gas_alpha > 1.5) return 0;
 
    if (nuisance.gas_lgT_w < 6.0 || nuisance.gas_lgT_w > 7.0) return 0;
-   if (nuisance.gas_eps1 < -0.3 || nuisance.gas_eps1 > 0.3) return 0;
-   if (nuisance.gas_eps2 < -0.3 || nuisance.gas_eps2 > 0.3) return 0;
+   if (nuisance.gas_eps1 < -0.8 || nuisance.gas_eps1 > 0.8) return 0;
+   if (nuisance.gas_eps2 < -0.8 || nuisance.gas_eps2 > 0.8) return 0;
    if (nuisance.gas_f_H < 0.7 || nuisance.gas_f_H > 0.8) return 0;
 
    // need to check the ranges below if they are varied
@@ -425,8 +425,8 @@ int set_nuisance_gas(double *p_gas)
 
    if (nuisance.gas_beta_v2 < 0.2 || nuisance.gas_beta_v2 > 1.0) return 0;
    if (nuisance.gas_lgM0_v2 < 12.5 || nuisance.gas_lgM0_v2 > 15.0) return 0;
-   if (nuisance.gas_eps1_v2 < -0.3 || nuisance.gas_eps1_v2 > 0.3) return 0;
-   if (nuisance.gas_eps2_v2 < -0.3 || nuisance.gas_eps2_v2 > 0.3) return 0;
+   if (nuisance.gas_eps1_v2 < -0.8 || nuisance.gas_eps1_v2 > 0.8) return 0;
+   if (nuisance.gas_eps2_v2 < -0.8 || nuisance.gas_eps2_v2 > 0.8) return 0;
 
 #endif
 
