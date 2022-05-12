@@ -4,7 +4,6 @@
 #SBATCH --partition=high_priority
 #SBATCH --qos=user_qos_timeifler
 #SBATCH --nodes=12
-#SBATCH --exclusive
 #SBATCH --ntasks=1128
 #SBATCH --ntasks-per-node=94
 #SBATCH --cpus-per-task=1
