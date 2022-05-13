@@ -55,6 +55,7 @@ initsurvey(survey_designation[model].encode('utf-8'),nsource_table[model],nlens_
 initgalaxies(file_source_z.encode('utf-8'),file_lens_z.encode('utf-8'),"gaussian".encode('utf-8'),"gaussian".encode('utf-8'),tomo_binning_source[model].encode('utf-8'),tomo_binning_lens[model].encode('utf-8'))
 initia("NLA_z".encode('utf-8'),"none".encode('utf-8'))
 
+initfb(1)
 # test also with
 #initpriors("none","none","none","Planck")
 #initpriors("none","none","none","random")
