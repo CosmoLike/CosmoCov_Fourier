@@ -38,6 +38,9 @@ home_datav_102pt_fft:
 home_datav_102pt_fft_notab:
 	gcc like_fourier_10x2pt.c $(cfftlog) -DRUN_FFT -DNOTAB -o ./like_fourier_10x2pt_fft_notab $(opt_home)
 
+home_datav_102pt_hf:
+	gcc like_fourier_10x2pt_halofit.c $(cfftlog) -DRUN_FFT -o ./like_fourier_10x2pt_hf $(opt_home)
+
 home_102pt_fft_shared:
 	gcc like_fourier_10x2pt.c $(cfftlog) -DRUN_FFT  -shared -o like_fourier_10x2pt_fft.so -fPIC $(opt_home)
 
