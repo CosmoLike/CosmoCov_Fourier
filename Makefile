@@ -24,6 +24,8 @@ home_cov_102pt_slow:
 
 home_cov_102pt_fft:
 	gcc compute_covariances_fourier_10x2pt.c $(cfftlog) -DRUN_FFT -o ./compute_covariances_fourier_10x2pt_fft $(opt_home)
+home_cov_102pt_fft_test:
+	gcc compute_covariances_fourier_10x2pt_test.c $(cfftlog) -DRUN_FFT -o ./compute_covariances_fourier_10x2pt_fft_test $(opt_home)
 
 home_cov_3x2pt_fft_hf:
 	gcc compute_covariances_fourier_3x2pt_halofit.c $(cfftlog) -DRUN_FFT -o ./compute_covariances_fourier_3x2pt_fft_hf $(opt_home)
