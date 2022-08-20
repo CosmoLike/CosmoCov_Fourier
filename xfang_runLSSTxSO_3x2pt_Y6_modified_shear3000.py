@@ -59,7 +59,11 @@ initfb(1)
 #initpriors("none","none","none","random")
 initprobes("3x2pt".encode('utf-8'))
 initdatainv(cov_file.encode('utf-8'),data_file.encode('utf-8'),mask_file.encode('utf-8'))
-initcmb("so_Y5".encode('utf-8'))
+# initcmb("so_Y5".encode('utf-8'))
+
+# use modified covariance and skip shearcalib and photo-z sampling
+skip_shearcalib_phz_sampling()
+
 #sample_params= sample_cosmology_only()
 sample_params = sample_cosmology_3x2_allsys(get_N_tomo_shear(),get_N_tomo_clustering(),MG=False, w0wa=False, cov_modified=True)
 

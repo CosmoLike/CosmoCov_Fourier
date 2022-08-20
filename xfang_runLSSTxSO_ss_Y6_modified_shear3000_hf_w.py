@@ -60,6 +60,10 @@ initia("NLA_z".encode('utf-8'),"none".encode('utf-8'))
 initprobes("shear_shear".encode('utf-8'))
 initdatainv(cov_file.encode('utf-8'),data_file.encode('utf-8'),mask_file.encode('utf-8'))
 # initcmb("so_Y5".encode('utf-8'))
+
+# use modified covariance and skip shearcalib and photo-z sampling
+skip_shearcalib_phz_sampling()
+
 #sample_params= sample_cosmology_only()
 sample_params = sample_cosmology_ss_hfsys(get_N_tomo_shear(),MG=False, w0wa=True, cov_modified=True)
 
