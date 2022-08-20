@@ -264,9 +264,9 @@ void init_binning_fourier(int Ncl, double lmin, double lmax, double lmax_shear, 
   
   like.Rmin_bias=Rmin_bias;
   like.Ncl=Ncl;
-  like.lmin= lmin; //std=20
-  like.lmax= lmax; //15,000
-  like.lmax_shear = lmax_shear; //5000
+  like.lmin= lmin;
+  like.lmax= lmax;
+  like.lmax_shear = lmax_shear;
   tomo.shear_Nbin=Ntomo_source;
   tomo.clustering_Nbin=Ntomo_lens;
   double ell;
@@ -806,7 +806,7 @@ void set_cmb_so_Y5() {
    // cmb.sensitivity = 18.*(constants.pi/180.)/60.;
    cmb.pathLensRecNoise = "./cmblensrec/so/YEAR5_2colformat_nlkk_v3_1_0deproj0_SENS1_fsky0p4_it_lT30-3000_lP30-5000.dat";
    like.lmax_kappacmb = 2999.;
-   like.lmin_kappacmb = 2.;
+   like.lmin_kappacmb = 100.;
    like.lmax_y = 7979.;
    like.lmin_y = 80.;
    cmb.fsky=0.4;
@@ -820,7 +820,7 @@ void set_cmb_so_Y1() {
    // cmb.sensitivity = 18.*(constants.pi/180.)/60.;
    cmb.pathLensRecNoise = "./cmblensrec/so/YEAR1_nlkk_SOlike_y1_tt_SENS1_qe_fsky0p4_lT30-3000.dat";
    like.lmax_kappacmb = 2999.;
-   like.lmin_kappacmb = 2.;
+   like.lmin_kappacmb = 100.;
    like.lmin_y = 80.;
    like.lmax_y = 7979.;
    cmb.fsky=0.4;
