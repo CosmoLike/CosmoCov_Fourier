@@ -9,7 +9,7 @@ import mpi4py
 # from mpp_blinding import seed as blinding_seed
 
 dirname = os.path.split(__file__)[0]
-lib_name = os.path.join(dirname, "like_fourier_10x2pt_fft_calib.so")
+lib_name = os.path.join(dirname, "like_fourier_10x2pt_fft_nocalib.so")
 lib=ctypes.cdll.LoadLibrary(lib_name)
 double = ctypes.c_double
 
@@ -314,23 +314,28 @@ log_multi_like = lib.log_multi_like
 lib.compute_data_vector.argtypes = [ctypes.c_char_p, InputCosmologyParams, InputNuisanceParams]
 compute_data_vector = lib.compute_data_vector
 
-def sample_cosmology_only(MG = False):
-    if MG:
-        varied_parameters = InputCosmologyParams().names()
-    else:
-        varied_parameters = ['omega_m']
-        varied_parameters.append('sigma_8')
-        varied_parameters.append('n_s')
+def sample_cosmology_only(MG = False, w0wa = False):
+
+    varied_parameters = ['omega_m']
+    varied_parameters.append('sigma_8')
+    varied_parameters.append('n_s')
+
+    if(w0wa):
         varied_parameters.append('w0')
         varied_parameters.append('wa')
-        varied_parameters.append('omega_b')
-        varied_parameters.append('h0')
+
+    varied_parameters.append('omega_b')
+    varied_parameters.append('h0')
+
+    if(MG):
+        varied_parameters.append('MGSigma')
+        varied_parameters.append('MGmu')
 
     return varied_parameters
 
 
-def sample_cosmology_10x2_allsys(tomo_N_shear,tomo_N_lens,MG = False, cov_modified = False):
-    varied_parameters = sample_cosmology_only(MG)
+def sample_cosmology_10x2_allsys(tomo_N_shear,tomo_N_lens,MG = False, w0wa=False, cov_modified=False):
+    varied_parameters = sample_cosmology_only(MG,w0wa)
     varied_parameters += ['bias_%d'%i for i in range(tomo_N_lens)]
     if cov_modified is False:
         varied_parameters += ['source_z_bias_%d'%i for i in range(tomo_N_shear)]

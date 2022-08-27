@@ -50,7 +50,7 @@ home_102pt_fft_shared:
 	gcc like_fourier_10x2pt.c $(cfftlog) -DRUN_FFT  -shared -o like_fourier_10x2pt_fft.so -fPIC $(opt_home)
 
 home_102pt_fft_shared_calib:
-	gcc like_fourier_10x2pt.c $(cfftlog) -DRUN_FFT -DTEST_CALIB  -shared -o like_fourier_10x2pt_fft_calib.so -fPIC $(opt_home)
+	gcc like_fourier_10x2pt.c $(cfftlog) -DRUN_FFT -DTEST_CALIB  -shared -o like_fourier_10x2pt_fft_nocalib.so -fPIC $(opt_home)
 
 
 
