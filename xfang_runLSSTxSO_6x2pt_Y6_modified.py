@@ -59,7 +59,7 @@ initfb(1)
 # test also with
 #initpriors("none","none","none","Planck")
 #initpriors("none","none","none","random")
-initprobes("8x2pt".encode('utf-8'))
+initprobes("6x2pt".encode('utf-8'))
 initdatainv(cov_file.encode('utf-8'),data_file.encode('utf-8'),mask_file.encode('utf-8'))
 initcmb("so_Y5".encode('utf-8'))
 
