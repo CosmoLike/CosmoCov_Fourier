@@ -331,6 +331,20 @@ def sample_cosmology_only(MG = False, w0wa = False):
 
     return varied_parameters
 
+def sample_cosmology_10x2_fixhalo(tomo_N_shear,tomo_N_lens,MG = False, w0wa=False, cov_modified=False):
+    varied_parameters = sample_cosmology_only(MG,w0wa)
+    varied_parameters += ['bias_%d'%i for i in range(tomo_N_lens)]
+    if cov_modified is False:
+        varied_parameters += ['source_z_bias_%d'%i for i in range(tomo_N_shear)]
+        varied_parameters.append('source_z_s')
+        varied_parameters += ['lens_z_bias_%d'%i for i in range(tomo_N_lens)]
+        varied_parameters.append('lens_z_s')
+        varied_parameters += ['shear_m_%d'%i for i in range(tomo_N_shear)]
+
+    varied_parameters.append('A_ia')
+    varied_parameters.append('eta_ia')
+
+    return varied_parameters
 
 def sample_cosmology_10x2_allsys(tomo_N_shear,tomo_N_lens,MG = False, w0wa=False, cov_modified=False):
     varied_parameters = sample_cosmology_only(MG,w0wa)
