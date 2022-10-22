@@ -346,6 +346,23 @@ def sample_cosmology_10x2_fixhalo(tomo_N_shear,tomo_N_lens,MG = False, w0wa=Fals
 
     return varied_parameters
 
+def sample_cosmology_10x2_fix_eps12Gamma(tomo_N_shear,tomo_N_lens,MG = False, w0wa=False, cov_modified=False):
+    varied_parameters = sample_cosmology_only(MG,w0wa)
+    varied_parameters += ['bias_%d'%i for i in range(tomo_N_lens)]
+    if cov_modified is False:
+        varied_parameters += ['source_z_bias_%d'%i for i in range(tomo_N_shear)]
+        varied_parameters.append('source_z_s')
+        varied_parameters += ['lens_z_bias_%d'%i for i in range(tomo_N_lens)]
+        varied_parameters.append('lens_z_s')
+        varied_parameters += ['shear_m_%d'%i for i in range(tomo_N_shear)]
+
+    varied_parameters.append('A_ia')
+    varied_parameters.append('eta_ia')
+
+    i_gas = [1,2,3, 7,8] # select gas parameters to vary
+    varied_parameters += ['gas_%d'%i for i in i_gas]
+    return varied_parameters
+
 def sample_cosmology_10x2_allsys(tomo_N_shear,tomo_N_lens,MG = False, w0wa=False, cov_modified=False):
     varied_parameters = sample_cosmology_only(MG,w0wa)
     varied_parameters += ['bias_%d'%i for i in range(tomo_N_lens)]
@@ -477,4 +494,58 @@ def sample_main(varied_parameters,sigma_z_shear,sigma_z_clustering, iterations, 
     #     f.flush()
     # f.close()
 
+# with fiducial value of e1=0.1
+def sample_main_e1(varied_parameters,sigma_z_shear,sigma_z_clustering, iterations, nwalker, nthreads, filename, blind=False, pool=None):
+    print(varied_parameters)
+
+    likelihood = LikelihoodFunctionWrapper(varied_parameters)
+    starting_point = InputCosmologyParams.fiducial().convert_to_vector_filter(varied_parameters)
+    
+    #changing the center of the 'starting sphere' of the MCMC, according to the fiducial input parameter 
+    new=InputNuisanceParams().fiducial()
+    setattr(new,'source_z_s',sigma_z_shear)
+    setattr(new,'lens_z_s',sigma_z_clustering)
+
+    setattr(new, 'gas_9', 0.1) ## set eps1=0.1
+
+    starting_point += new.convert_to_vector_filter(varied_parameters)
+    #starting_point += InputCosmologyParams.fiducial().convert_to_vector_filter(varied_parameters)
+
+    std = InputCosmologyParams.fiducial_sigma().convert_to_vector_filter(varied_parameters)
+    std += InputNuisanceParams().fiducial_sigma().convert_to_vector_filter(varied_parameters)
+
+    p0 = emcee.utils.sample_ball(starting_point, std, size=nwalker)
+
+    ndim = len(starting_point)
+    print("ndim = %d"%(ndim))
+    print("start = ", starting_point)
+    print("std = ", std)
+
+
+    # if pool is not None:
+    #     if not pool.is_master():
+    #         pool.wait()
+    #         sys.exit(0)
+
+
+    sampler = emcee.EnsembleSampler(nwalker, ndim, likelihood,threads=nthreads,pool=pool)
+
+#    sampler = emcee.EnsembleSampler(nwalker, ndim, likelihood, pool=pool)
+
+    f = open(filename, 'w')
+
+    #write header here
+    f.write('# ' + '    '.join(varied_parameters)+" log_like\n")
+    f.write('#blind=%s\n'%blind)
+    if blind:
+        f.write('#blinding_seed=%d\n'%blinding_seed)
+
+    for (p, loglike, state) in sampler.sample(p0,iterations=iterations):
+        for row,logl in zip(p,loglike):
+            if blind:
+                row = blind_parameters(varied_parameters, row)
+            p_text = '  '.join(str(r) for r in row)
+            f.write('%s %e\n' % (p_text,logl))
+        f.flush()
+    f.close()
 
