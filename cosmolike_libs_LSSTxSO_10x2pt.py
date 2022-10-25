@@ -273,6 +273,51 @@ class InputNuisanceParams(IterableStruct):
         return c
 
 
+class InputNuisanceParams_e1(IterableStruct): ## set fiducial e1=0.1
+    section_name = "nuisance_parameters"
+    _fields_ = [
+        ("bias", double*10),
+        ("source_z_bias", double*10),
+        ("source_z_s", double),
+        ("lens_z_bias", double*10),
+        ("lens_z_s", double),
+        ("shear_m", double*10),
+        ("A_ia", double),
+        ("eta_ia", double),
+        ("gas", double*11)
+    ]
+    @classmethod
+    def fiducial(cls):
+        c = cls()
+        c.bias[:] = [1.202462,1.313657,1.406308,1.493877,1.580479,1.668860,1.761558,1.860530,1.968723,2.090681]
+        c.source_z_bias[:] = np.repeat(0.0, 10)
+        c.source_z_s = 0.05
+        c.lens_z_bias[:] = np.repeat(0.0, 10)
+        c.lens_z_s = 0.03
+        c.shear_m[:] = np.repeat(0.0, 10)
+        c.A_ia = 0.5
+        c.eta_ia = 0.
+        c.gas[:] = [1.17,0.6,14.,1.,0.03,12.5,1.2,\
+                    6.5,0.752,0.1,0.]
+        return c
+
+    @classmethod
+    def fiducial_sigma(cls):
+        c = cls()
+        c.bias[:] = np.repeat(0.2, 10)
+        c.source_z_bias[:] = np.repeat(0.01, 10)
+        c.source_z_s = 0.005
+        c.lens_z_bias[:] = np.repeat(0.01, 10)
+        c.lens_z_s = 0.005
+        c.shear_m[:] = np.repeat(0.01, 10)
+        c.A_ia = 0.1
+        c.eta_ia = 0.1
+        c.gas[:] = [0.01,0.01,0.05,0.05,0.001,0.5,0.05,\
+                    0.05,0.01,0.05,0.05]
+        return c
+
+
+
 class LikelihoodFunctionWrapper(object):
     def __init__(self, varied_parameters):
         self.varied_parameters = varied_parameters
@@ -502,17 +547,15 @@ def sample_main_e1(varied_parameters,sigma_z_shear,sigma_z_clustering, iteration
     starting_point = InputCosmologyParams.fiducial().convert_to_vector_filter(varied_parameters)
     
     #changing the center of the 'starting sphere' of the MCMC, according to the fiducial input parameter 
-    new=InputNuisanceParams().fiducial()
+    new=InputNuisanceParams_e1().fiducial()
     setattr(new,'source_z_s',sigma_z_shear)
     setattr(new,'lens_z_s',sigma_z_clustering)
-
-    setattr(new, 'gas_9', 0.1) ## set eps1=0.1
 
     starting_point += new.convert_to_vector_filter(varied_parameters)
     #starting_point += InputCosmologyParams.fiducial().convert_to_vector_filter(varied_parameters)
 
     std = InputCosmologyParams.fiducial_sigma().convert_to_vector_filter(varied_parameters)
-    std += InputNuisanceParams().fiducial_sigma().convert_to_vector_filter(varied_parameters)
+    std += InputNuisanceParams_e1().fiducial_sigma().convert_to_vector_filter(varied_parameters)
 
     p0 = emcee.utils.sample_ball(starting_point, std, size=nwalker)
 
