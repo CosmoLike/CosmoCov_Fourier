@@ -349,6 +349,37 @@ class LikelihoodFunctionWrapper(object):
         like = lib.log_multi_like(icp, inp)
         return like
 
+class LikelihoodFunctionWrapper_e1(object):
+    def __init__(self, varied_parameters):
+        self.varied_parameters = varied_parameters
+
+
+    def fill_varied(self, icp, inp, x):
+        assert len(x) == len(self.varied_parameters), "Wrong number of parameters"
+        i = 0
+        for s in [icp, inp]:
+            for name, obj, length in s.iter_parameters():
+                if length==0:
+                    if name in self.varied_parameters:
+                        setattr(s, name, x[i])        
+                        i+=1
+                else:
+                    for j in range(length):
+                        name_i = name + "_" + str(j)
+                        if name_i in self.varied_parameters:
+                            obj[j] = x[i]
+                            i+=1
+
+    def __call__(self, x):
+        icp = InputCosmologyParams.fiducial()
+        inp = InputNuisanceParams_e1.fiducial()
+        self.fill_varied(icp, inp, x)
+        #icp.print_struct()
+        #inp.print_struct()
+        #print
+        like = lib.log_multi_like(icp, inp)
+        return like
+
 
 lib.log_multi_like.argtypes = [InputCosmologyParams, InputNuisanceParams]
 lib.log_multi_like.restype = double
@@ -543,7 +574,7 @@ def sample_main(varied_parameters,sigma_z_shear,sigma_z_clustering, iterations, 
 def sample_main_e1(varied_parameters,sigma_z_shear,sigma_z_clustering, iterations, nwalker, nthreads, filename, blind=False, pool=None):
     print(varied_parameters)
 
-    likelihood = LikelihoodFunctionWrapper(varied_parameters)
+    likelihood = LikelihoodFunctionWrapper_e1(varied_parameters)
     starting_point = InputCosmologyParams.fiducial().convert_to_vector_filter(varied_parameters)
     
     #changing the center of the 'starting sphere' of the MCMC, according to the fiducial input parameter 
