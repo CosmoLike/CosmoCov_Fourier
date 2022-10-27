@@ -272,52 +272,6 @@ class InputNuisanceParams(IterableStruct):
                     0.05,0.01,0.05,0.05]
         return c
 
-
-class InputNuisanceParams_e1(IterableStruct): ## set fiducial e1=0.1
-    section_name = "nuisance_parameters"
-    _fields_ = [
-        ("bias", double*10),
-        ("source_z_bias", double*10),
-        ("source_z_s", double),
-        ("lens_z_bias", double*10),
-        ("lens_z_s", double),
-        ("shear_m", double*10),
-        ("A_ia", double),
-        ("eta_ia", double),
-        ("gas", double*11)
-    ]
-    @classmethod
-    def fiducial(cls):
-        c = cls()
-        c.bias[:] = [1.202462,1.313657,1.406308,1.493877,1.580479,1.668860,1.761558,1.860530,1.968723,2.090681]
-        c.source_z_bias[:] = np.repeat(0.0, 10)
-        c.source_z_s = 0.05
-        c.lens_z_bias[:] = np.repeat(0.0, 10)
-        c.lens_z_s = 0.03
-        c.shear_m[:] = np.repeat(0.0, 10)
-        c.A_ia = 0.5
-        c.eta_ia = 0.
-        c.gas[:] = [1.17,0.6,14.,1.,0.03,12.5,1.2,\
-                    6.5,0.752,0.1,0.]
-        return c
-
-    @classmethod
-    def fiducial_sigma(cls):
-        c = cls()
-        c.bias[:] = np.repeat(0.2, 10)
-        c.source_z_bias[:] = np.repeat(0.01, 10)
-        c.source_z_s = 0.005
-        c.lens_z_bias[:] = np.repeat(0.01, 10)
-        c.lens_z_s = 0.005
-        c.shear_m[:] = np.repeat(0.01, 10)
-        c.A_ia = 0.1
-        c.eta_ia = 0.1
-        c.gas[:] = [0.01,0.01,0.05,0.05,0.001,0.5,0.05,\
-                    0.05,0.01,0.05,0.05]
-        return c
-
-
-
 class LikelihoodFunctionWrapper(object):
     def __init__(self, varied_parameters):
         self.varied_parameters = varied_parameters
@@ -348,38 +302,6 @@ class LikelihoodFunctionWrapper(object):
         #print
         like = lib.log_multi_like(icp, inp)
         return like
-
-class LikelihoodFunctionWrapper_e1(object):
-    def __init__(self, varied_parameters):
-        self.varied_parameters = varied_parameters
-
-
-    def fill_varied(self, icp, inp, x):
-        assert len(x) == len(self.varied_parameters), "Wrong number of parameters"
-        i = 0
-        for s in [icp, inp]:
-            for name, obj, length in s.iter_parameters():
-                if length==0:
-                    if name in self.varied_parameters:
-                        setattr(s, name, x[i])        
-                        i+=1
-                else:
-                    for j in range(length):
-                        name_i = name + "_" + str(j)
-                        if name_i in self.varied_parameters:
-                            obj[j] = x[i]
-                            i+=1
-
-    def __call__(self, x):
-        icp = InputCosmologyParams.fiducial()
-        inp = InputNuisanceParams_e1.fiducial()
-        self.fill_varied(icp, inp, x)
-        #icp.print_struct()
-        #inp.print_struct()
-        #print
-        like = lib.log_multi_like(icp, inp)
-        return like
-
 
 lib.log_multi_like.argtypes = [InputCosmologyParams, InputNuisanceParams]
 lib.log_multi_like.restype = double
@@ -569,57 +491,4 @@ def sample_main(varied_parameters,sigma_z_shear,sigma_z_clustering, iterations, 
     #         f.write('%s %e\n' % (p_text,loglike))
     #     f.flush()
     # f.close()
-
-# with fiducial value of e1=0.1
-def sample_main_e1(varied_parameters,sigma_z_shear,sigma_z_clustering, iterations, nwalker, nthreads, filename, blind=False, pool=None):
-    print(varied_parameters)
-
-    likelihood = LikelihoodFunctionWrapper_e1(varied_parameters)
-    starting_point = InputCosmologyParams.fiducial().convert_to_vector_filter(varied_parameters)
-    
-    #changing the center of the 'starting sphere' of the MCMC, according to the fiducial input parameter 
-    new=InputNuisanceParams_e1().fiducial()
-    setattr(new,'source_z_s',sigma_z_shear)
-    setattr(new,'lens_z_s',sigma_z_clustering)
-
-    starting_point += new.convert_to_vector_filter(varied_parameters)
-    #starting_point += InputCosmologyParams.fiducial().convert_to_vector_filter(varied_parameters)
-
-    std = InputCosmologyParams.fiducial_sigma().convert_to_vector_filter(varied_parameters)
-    std += InputNuisanceParams_e1().fiducial_sigma().convert_to_vector_filter(varied_parameters)
-
-    p0 = emcee.utils.sample_ball(starting_point, std, size=nwalker)
-
-    ndim = len(starting_point)
-    print("ndim = %d"%(ndim))
-    print("start = ", starting_point)
-    print("std = ", std)
-
-
-    # if pool is not None:
-    #     if not pool.is_master():
-    #         pool.wait()
-    #         sys.exit(0)
-
-
-    sampler = emcee.EnsembleSampler(nwalker, ndim, likelihood,threads=nthreads,pool=pool)
-
-#    sampler = emcee.EnsembleSampler(nwalker, ndim, likelihood, pool=pool)
-
-    f = open(filename, 'w')
-
-    #write header here
-    f.write('# ' + '    '.join(varied_parameters)+" log_like\n")
-    f.write('#blind=%s\n'%blind)
-    if blind:
-        f.write('#blinding_seed=%d\n'%blinding_seed)
-
-    for (p, loglike, state) in sampler.sample(p0,iterations=iterations):
-        for row,logl in zip(p,loglike):
-            if blind:
-                row = blind_parameters(varied_parameters, row)
-            p_text = '  '.join(str(r) for r in row)
-            f.write('%s %e\n' % (p_text,logl))
-        f.flush()
-    f.close()
 
