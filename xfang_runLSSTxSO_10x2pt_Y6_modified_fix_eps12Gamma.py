@@ -6,7 +6,7 @@ import sys
 # sys.path.append('/home/u1/xfang/LSSTxSO')
 sys.path.append('/home/u1/xfang/CosmoCov_Fourier')
 
-from cosmolike_libs_LSSTxSO_10x2pt import * 
+from cosmolike_libs_LSSTxSO_10x2pt_e1 import * 
 from schwimmbad import MPIPool
 
 inv=['invcov_Y1_10x2pt','invcov_Y6_10x2pt_modified']
