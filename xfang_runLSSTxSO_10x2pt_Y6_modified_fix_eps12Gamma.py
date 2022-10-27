@@ -71,5 +71,5 @@ sample_params = sample_cosmology_10x2_fix_eps12Gamma(get_N_tomo_shear(),get_N_to
 
 Nwalker = int(sys.argv[1])
 # sample_main(sample_params,sigma_z_shear[model],sigma_z_clustering[model],8000,Nwalker,1,chain_file, blind=False, pool=MPIPool())
-sample_main_e1(sample_params,sigma_z_shear[model],sigma_z_clustering[model],8000,Nwalker,1,chain_file, blind=False, pool=MPIPool())
+sample_main(sample_params,sigma_z_shear[model],sigma_z_clustering[model],8000,Nwalker,1,chain_file, blind=False, pool=MPIPool())
 
