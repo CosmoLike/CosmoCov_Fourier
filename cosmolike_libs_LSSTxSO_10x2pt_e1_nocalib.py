@@ -347,7 +347,7 @@ def sample_cosmology_10x2_fix_eps12Gamma(tomo_N_shear,tomo_N_lens,MG = False, w0
     varied_parameters.append('A_ia')
     varied_parameters.append('eta_ia')
 
-    i_gas = [1,2,3, 7,8] # select gas parameters to vary
+    i_gas = [1,2,3, 7,8, 11,12] # select gas parameters to vary
     varied_parameters += ['gas_%d'%i for i in i_gas]
     return varied_parameters
 
