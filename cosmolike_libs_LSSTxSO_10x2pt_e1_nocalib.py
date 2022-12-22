@@ -351,6 +351,27 @@ def sample_cosmology_10x2_fix_eps12Gamma(tomo_N_shear,tomo_N_lens,MG = False, w0
     varied_parameters += ['gas_%d'%i for i in i_gas]
     return varied_parameters
 
+def sample_cosmology_10x2_fix_y_eps12Gamma(tomo_N_shear,tomo_N_lens,MG = False, w0wa=False, cov_modified=False):
+    '''
+    only fix {eps1, eps2, Gamma} for y part; matter part freely varying
+    '''
+    varied_parameters = sample_cosmology_only(MG,w0wa)
+    varied_parameters += ['bias_%d'%i for i in range(tomo_N_lens)]
+    if cov_modified is False:
+        varied_parameters += ['source_z_bias_%d'%i for i in range(tomo_N_shear)]
+        varied_parameters.append('source_z_s')
+        varied_parameters += ['lens_z_bias_%d'%i for i in range(tomo_N_lens)]
+        varied_parameters.append('lens_z_s')
+        varied_parameters += ['shear_m_%d'%i for i in range(tomo_N_shear)]
+
+    varied_parameters.append('A_ia')
+    varied_parameters.append('eta_ia')
+
+    # {9,10}: eps1,2 for matter; {13,14}: eps1,2 for y
+    i_gas = [1,2,3, 7,8,9,10 11,12] # select gas parameters to vary
+    varied_parameters += ['gas_%d'%i for i in i_gas]
+    return varied_parameters
+
 def sample_cosmology_10x2_allsys(tomo_N_shear,tomo_N_lens,MG = False, w0wa=False, cov_modified=False):
     varied_parameters = sample_cosmology_only(MG,w0wa)
     varied_parameters += ['bias_%d'%i for i in range(tomo_N_lens)]
