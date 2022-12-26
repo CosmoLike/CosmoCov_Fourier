@@ -157,14 +157,13 @@ void run_cov_AB_CD(char ABCD[2][4], char *OUTFILE, char *PATH, double *ell, doub
 
 
 
-
+#define N_scenarios 4
 int main(int argc, char** argv)
 {
   
   int i,l,m,n,o,s,p,nl1,t,k;
   char OUTFILE[400],filename[400],arg1[400],arg2[400];
   
-  const int N_scenarios=4;
 
   // Y1 corresponds to DESC SRD Y1, Y6 corresponds to assuming that we cover the full SO area=0.4*fsky and at a depth of 26.1 which is in a range of reasonable scenarios (see https://github.com/LSSTDESC/ObsStrat/tree/static/static )
   // Roman fiducial: 2000deg^2, nlens=51 (SNR=10), nsrc=66
