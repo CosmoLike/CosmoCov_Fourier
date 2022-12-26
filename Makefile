@@ -82,6 +82,10 @@ puma_cov_102pt:
 puma_cov_102pt_fft:
 	gcc compute_covariances_fourier_10x2pt.c $(cfftlog) -DRUN_FFT -o ./compute_covariances_fourier_10x2pt_fft $(opt_puma)
 
+puma_cov_102pt_fft_1sample:
+	gcc compute_covariances_fourier_10x2pt.c $(cfftlog) -DRUN_FFT -DONESAMPLE -o ./compute_covariances_fourier_10x2pt_fft_1sample $(opt_puma)
+
+
 puma_cov_102pt_ssc:
 	gcc compute_covariances_fourier_10x2pt_ssc.c -o ./compute_covariances_fourier_10x2pt_ssc $(opt_puma)
 
