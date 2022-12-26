@@ -59,6 +59,11 @@
 // s = kappa from source galaxies ("s" as in "source sample")
 // And alphabetical order
 
+// used in checking existence of output directory
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+//
 
 void run_cov_AB_CD(char ABCD[2][4], char *OUTFILE, char *PATH, double *ell, double *dell, int n1, int n2,int start);
 
@@ -159,25 +164,28 @@ int main(int argc, char** argv)
   int i,l,m,n,o,s,p,nl1,t,k;
   char OUTFILE[400],filename[400],arg1[400],arg2[400];
   
-  int N_scenarios=3;
-  double area_table[3]={12300.0,16500.0,18000.}; // Y1 corresponds to DESC SRD Y1, Y6 corresponds to assuming that we cover the full SO area=0.4*fsky and at a depth of 26.1 which is in a range of reasonable scenarios (see https://github.com/LSSTDESC/ObsStrat/tree/static/static )
-  // double nsource_table[3]={11.0,23.0,28.0};
+  const int N_scenarios=4;
+
+  // Y1 corresponds to DESC SRD Y1, Y6 corresponds to assuming that we cover the full SO area=0.4*fsky and at a depth of 26.1 which is in a range of reasonable scenarios (see https://github.com/LSSTDESC/ObsStrat/tree/static/static )
+  // Roman fiducial: 2000deg^2, nlens=51 (SNR=10), nsrc=66
+  double area_table[N_scenarios]={12300.0,16500.0,18000.,2000.};  // double nsource_table[3]={11.0,23.0,28.0};
   // double nlens_table[3]={18.0,41.0,48.0};
 
-  double nsource_table[3]={10.7,22.5,27.1};
-  double nlens_table[3]={13.1,26.8,32.0};
+  double nsource_table[N_scenarios]={10.7,22.5,27.1, 66.0};
+  double nlens_table[N_scenarios]={13.1,26.8,32.0, 51.0};
   
-  char survey_designation[3][200]={"LSSTxSO_Y1","LSSTxSO_Y6","LSSTxSO_Y10"};
+  char survey_designation[N_scenarios][200]={"LSSTxSO_Y1","LSSTxSO_Y6","LSSTxSO_Y10", "RomanxSO"};
   
-  char source_zfile[3][400]={"src_LSSTY1","src_LSSTY6","src_LSSTY10"};
+  char source_zfile[N_scenarios][400]={"src_LSSTY1","src_LSSTY6","src_LSSTY10", "zdistri_WFIRST_LSST_lensing_fine_bin_norm"};
 
 #ifdef ONESAMPLE
-  char lens_zfile[3][400]={"src_LSSTY1","src_LSSTY6","src_LSSTY10"};
+  char lens_zfile[N_scenarios][400]={"src_LSSTY1","src_LSSTY6","src_LSSTY10", "zdistri_WFIRST_LSST_lensing_fine_bin_norm"};
   nlens_table[0] = nsource_table[0];
   nlens_table[1] = nsource_table[1];
   nlens_table[2] = nsource_table[2];
+  nlens_table[3] = nsource_table[3];
 #else
-  char lens_zfile[3][400]={"lens_LSSTY1","lens_LSSTY6","lens_LSSTY10"};
+  char lens_zfile[4][400]={"lens_LSSTY1","lens_LSSTY6","lens_LSSTY10", "zdistri_WFIRST_LSST_clustering_fine_bin_norm"};
 #endif
 
   int hit=atoi(argv[1]);
@@ -198,14 +206,18 @@ int main(int argc, char** argv)
 #ifdef ONESAMPLE
   init_galaxies(arg1,arg2,"none","none","source_std","lens=src");
 #else
-  init_galaxies(arg1,arg2,"none","none","source_std","LSST_gold");
+  if(t < 3) { // LSST
+    init_galaxies(arg1,arg2,"none","none","source_std","LSST_gold");
+  } else { // Roman
+    init_galaxies(arg1,arg2,"none","none","source_std","WF_SN10");
+  }
 #endif
-  init_IA("none","GAMA"); 
-  init_probes("10x2pt");
+  init_IA("none","GAMA");
+  char probe[] = "10x2pt";
+  init_probes(probe);
 
   if(t==0) init_cmb("so_Y1");
-  if(t==1) init_cmb("so_Y5");
-  if(t==2) init_cmb("so_Y5");
+  if(t>0) init_cmb("so_Y5");
 
   //set l-bins for shear, ggl, clustering, clusterWL
   double logdl=(log(like.lmax)-log(like.lmin))/like.Ncl;
@@ -226,18 +238,24 @@ int main(int argc, char** argv)
   sprintf(survey.name,"%s_area%le_ng%le_nl%le",survey_designation[t],survey.area,survey.n_gal,survey.n_lens);
   printf("area: %le n_source: %le n_lens: %le\n",survey.area,survey.n_gal,survey.n_lens);
 
+  // Setup output dir
+  sprintf(covparams.outdir,"out_cov_%s_%s", survey_designation[t], probe);
 #ifdef ONESAMPLE
-  sprintf(covparams.outdir,"out_cov_lsstxso_1sample/");
-#else
-  sprintf(covparams.outdir,"out_cov_lsstxso_10x2pt/");
-  // sprintf(covparams.outdir,"tests/new2/");
+  sprintf(covparams.outdir,"%s_1sample", covparams.outdir);
 #endif
 #ifdef SLOW
-  sprintf(covparams.outdir,"out_cov_lsstxso_10x2pt_slow/");
+  sprintf(covparams.outdir,"%s_slow", covparams.outdir);
 #endif
 #ifdef RUN_FFT
-  sprintf(covparams.outdir,"out_cov_lsstxso_10x2pt_fft/");
+  sprintf(covparams.outdir,"%s_fft", covparams.outdir);
 #endif
+  sprintf(covparams.outdir,"%s/", covparams.outdir);
+
+  // if outdir doesn't exist, create one
+  struct stat st = {0};
+  if (stat(covparams.outdir, &st) == -1) {
+      mkdir(covparams.outdir, 0700);
+  }
 
   printf("----------------------------------\n");
   char ABCD[2][4];
