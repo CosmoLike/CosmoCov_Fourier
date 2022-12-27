@@ -44,6 +44,10 @@ home_datav_102pt:
 
 home_datav_102pt_fft:
 	gcc like_fourier_10x2pt.c $(cfftlog) -DRUN_FFT -o ./like_fourier_10x2pt_fft $(opt_home)
+
+home_datav_102pt_fft_1sample:
+	gcc like_fourier_10x2pt.c $(cfftlog) -DRUN_FFT -DONESAMPLE -o ./like_fourier_10x2pt_fft_1sample $(opt_home)
+
 home_datav_102pt_fft_notab:
 	gcc like_fourier_10x2pt.c $(cfftlog) -DRUN_FFT -DNOTAB -o ./like_fourier_10x2pt_fft_notab $(opt_home)
 

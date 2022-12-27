@@ -2,18 +2,17 @@
 
 ## Photo-z and shear calibration marginalization already absorbed in Covariance
 
-import sys
-# sys.path.append('/home/u1/xfang/LSSTxSO')
-sys.path.append('/home/u1/xfang/CosmoCov_Fourier')
+import sys, os
+sys.path.append(os.path.dirname(sys.path[0]))
 
 from cosmolike_libs_LSSTxSO_10x2pt import * 
 from schwimmbad import MPIPool
 
-inv=['invcov_Y1_10x2pt','invcov_Y6_10x2pt_modified_shear3000']
+inv=['invcov_Y1_10x2pt','invcov_Y6_8x2pt_modified_shear3000']
 
-data=['10x2pt_LSSTxSO_Y1','10x2pt_fid_shear3000']
+data=['10x2pt_LSSTxSO_Y1','8x2pt_fid_shear3000']
 
-mask=['...','mask_10x2pt_shear3000.txt']
+mask=['...','mask_8x2pt_shear3000.txt']
 # bary=['LPC_6x2pt_LSSTxSO_Y1','LPC_6x2pt_LSSTxSO_Y6']
 
 source_z=['src_LSSTY1','src_LSSTY6'] 
@@ -43,7 +42,7 @@ data_file = os.path.join(dirname, "datav/",data[model])
 cov_file = os.path.join(dirname, "cov/",inv[model])
 mask_file = os.path.join(dirname, "datav/",mask[model])
 #cov_file = os.path.join("/Users/timeifler/Dropbox/cosmolike_store/LSST_emu/inv/",inv[model])
-chain_file = os.path.join(dirname, "chains/LSSTxSO_10x2pt_model_%d_modified_shear3000" %model)
+chain_file = os.path.join(dirname, "chains/LSSTxSO_8x2pt_model_%d_modified_shear3000" %model)
 # bary_file=os.path.join(dirname, "baryons/",bary[model])
 
 initcosmo("halomodel".encode('utf-8'))
@@ -59,7 +58,7 @@ initfb(1)
 # test also with
 #initpriors("none","none","none","Planck")
 #initpriors("none","none","none","random")
-initprobes("10x2pt".encode('utf-8'))
+initprobes("8x2pt".encode('utf-8'))
 initdatainv(cov_file.encode('utf-8'),data_file.encode('utf-8'),mask_file.encode('utf-8'))
 initcmb("so_Y5".encode('utf-8'))
 

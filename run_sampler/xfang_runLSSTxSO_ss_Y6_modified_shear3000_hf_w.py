@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 
-import sys
-# sys.path.append('/home/u1/xfang/LSSTxSO')
-sys.path.append('/home/u1/xfang/CosmoCov_Fourier')
+import sys, os
+sys.path.append(os.path.dirname(sys.path[0]))
 
 from cosmolike_libs_LSSTxSO_10x2pt import * 
 from schwimmbad import MPIPool
@@ -41,7 +40,7 @@ data_file = os.path.join(dirname, "datav/",data[model])
 cov_file = os.path.join(dirname, "cov/",inv[model])
 mask_file = os.path.join(dirname, "datav/",mask[model])
 #cov_file = os.path.join("/Users/timeifler/Dropbox/cosmolike_store/LSST_emu/inv/",inv[model])
-chain_file = os.path.join(dirname, "chains/LSSTxSO_ss_model_%d_modified_shear3000_hf" %model)
+chain_file = os.path.join(dirname, "chains/LSSTxSO_ss_model_%d_modified_shear3000_hf_w" %model)
 # bary_file=os.path.join(dirname, "baryons/",bary[model])
 
 initcosmo("halofit".encode('utf-8'))
@@ -65,7 +64,7 @@ initdatainv(cov_file.encode('utf-8'),data_file.encode('utf-8'),mask_file.encode(
 skip_shearcalib_phz_sampling()
 
 #sample_params= sample_cosmology_only()
-sample_params = sample_cosmology_ss_hfsys(get_N_tomo_shear(),MG=False, w0wa=False, cov_modified=True)
+sample_params = sample_cosmology_ss_hfsys(get_N_tomo_shear(),MG=False, w0wa=True, cov_modified=True)
 
 Nwalker = int(sys.argv[1])
 sample_main(sample_params,sigma_z_shear[model],sigma_z_clustering[model],8000,Nwalker,1,chain_file, blind=False, pool=MPIPool())

@@ -767,35 +767,40 @@ void save_zdistr_lenses(int zl){
 /* here, do your time-consuming job */
   int sce=atoi(argv[1]);
 
-  int N_scenarios=2;
+  int N_scenarios=4;
 
-  double sigma_zphot_shear[3]={0.05,0.05};
-  double sigma_zphot_clustering[3]={0.03,0.03};
+  // Roman uses optimistic scenario (Table 2 of 2004.05271)
+  double sigma_zphot_shear[4]={0.05,0.05,0.05, 0.01};
+  double sigma_zphot_clustering[4]={0.03,0.03,0.03, 0.01};
 
-  double area_table[2]={12300.0,16500.0}; // Y1 corresponds to DESC SRD Y1, Y6 corresponds to assuming that we cover the full SO area=0.4*fsky and at a depth of 26.1 which is in a range of reasonable scenarios (see https://github.com/LSSTDESC/ObsStrat/tree/static/static )
+  double area_table[4]={12300.0,16500.0,18000.0, 2000.0}; // Y1 corresponds to DESC SRD Y1, Y6 corresponds to assuming that we cover the full SO area=0.4*fsky and at a depth of 26.1 which is in a range of reasonable scenarios (see https://github.com/LSSTDESC/ObsStrat/tree/static/static )
   // double nsource_table[2]={11.0,23.0};
   // double nlens_table[2]={18.0,41.0};
 
-  double nsource_table[2]={10.7,22.5};
-  double nlens_table[2]={13.1,26.8};
+  double nsource_table[4]={10.7,22.5,27.1, 66.0};
+  double nlens_table[4]={13.1,26.8,32.0, 51.0};
 
-  char survey_designation[2][200]={"LSSTxSO_Y1","LSSTxSO_Y6"};
-  char tomo_binning_source[2][200]={"source_std","source_std"};
+  char survey_designation[4][200]={"LSSTxSO_Y1","LSSTxSO_Y6","LSSTxSO_Y10","RomanxSO"};
+  char tomo_binning_source[4][200]={"source_std","source_std","source_std","source_std"};
   // even for lens=src, this setting is valid, because the input lens/src zfiles are generated with the same z-cut:(0.2,1.2)
 
-  char source_zfile[2][400]={"src_LSSTY1","src_LSSTY6"};
+  char source_zfile[4][400]={"src_LSSTY1","src_LSSTY6","src_LSSTY10", "zdistri_WFIRST_LSST_lensing_fine_bin_norm"};
 #ifdef ONESAMPLE
-  char lens_zfile[2][400]={"src_LSSTY1","src_LSSTY6"};
-  char tomo_binning_lens[2][200]={"lens=src","lens=src"};
+  char lens_zfile[4][400]={"src_LSSTY1","src_LSSTY6","src_LSSTY10", "zdistri_WFIRST_LSST_lensing_fine_bin_norm"};
+  char tomo_binning_lens[4][200]={"lens=src","lens=src","lens=src","lens=src"};
   nlens_table[0] = nsource_table[0];
   nlens_table[1] = nsource_table[1];
+  nlens_table[2] = nsource_table[2];
+  nlens_table[3] = nsource_table[3];
   sigma_zphot_clustering[0] = sigma_zphot_shear[0];
   sigma_zphot_clustering[1] = sigma_zphot_shear[1];
+  sigma_zphot_clustering[2] = sigma_zphot_shear[2];
+  sigma_zphot_clustering[3] = sigma_zphot_shear[3];
 #else
-  char lens_zfile[2][400]={"lens_LSSTY1", "lens_LSSTY6"};
-  char tomo_binning_lens[2][200]={"LSST_gold","LSST_gold"};
+  char lens_zfile[4][400]={"lens_LSSTY1", "lens_LSSTY6", "lens_LSSTY10", "zdistri_WFIRST_LSST_clustering_fine_bin_norm"};
+  char tomo_binning_lens[4][200]={"LSST_gold","LSST_gold","LSST_gold","WF_SN10"};
 #endif
-  char cmb_yr[2][100]={"so_Y1","so_Y5"};
+  char cmb_yr[4][100]={"so_Y1","so_Y5","so_Y5","so_Y5"};
 
   init_cosmo_runmode("halomodel");
   // init_cosmo_runmode("halofit");

@@ -2,11 +2,10 @@
 
 ## Photo-z and shear calibration marginalization already absorbed in Covariance
 
-import sys
-# sys.path.append('/home/u1/xfang/LSSTxSO')
-sys.path.append('/home/u1/xfang/CosmoCov_Fourier')
+import sys, os
+sys.path.append(os.path.dirname(sys.path[0]))
 
-from cosmolike_libs_LSSTxSO_10x2pt_e1_nocalib import * 
+from cosmolike_libs_LSSTxSO_10x2pt_e1 import * 
 from schwimmbad import MPIPool
 
 inv=['invcov_Y1_10x2pt','invcov_Y6_10x2pt_modified']
@@ -43,7 +42,7 @@ data_file = os.path.join(dirname, "datav/",data[model])
 cov_file = os.path.join(dirname, "cov/",inv[model])
 mask_file = os.path.join(dirname, "datav/",mask[model])
 #cov_file = os.path.join("/Users/timeifler/Dropbox/cosmolike_store/LSST_emu/inv/",inv[model])
-chain_file = os.path.join(dirname, "chains/LSSTxSO_10x2pt_model_%d_modified_fix_eps12Gamma_nocalib" %model)
+chain_file = os.path.join(dirname, "chains/LSSTxSO_10x2pt_model_%d_modified_fixhalo-e1-0.1" %model)
 # bary_file=os.path.join(dirname, "baryons/",bary[model])
 
 initcosmo("halomodel".encode('utf-8'))
@@ -67,9 +66,8 @@ initcmb("so_Y5".encode('utf-8'))
 skip_shearcalib_phz_sampling()
 
 #sample_params= sample_cosmology_only()
-sample_params = sample_cosmology_10x2_fix_eps12Gamma(get_N_tomo_shear(),get_N_tomo_clustering(), MG=False, w0wa=False, cov_modified=True)
+sample_params = sample_cosmology_10x2_fixhalo(get_N_tomo_shear(),get_N_tomo_clustering(), MG=False, w0wa=False, cov_modified=True)
 
 Nwalker = int(sys.argv[1])
-# sample_main(sample_params,sigma_z_shear[model],sigma_z_clustering[model],8000,Nwalker,1,chain_file, blind=False, pool=MPIPool())
 sample_main(sample_params,sigma_z_shear[model],sigma_z_clustering[model],8000,Nwalker,1,chain_file, blind=False, pool=MPIPool())
 

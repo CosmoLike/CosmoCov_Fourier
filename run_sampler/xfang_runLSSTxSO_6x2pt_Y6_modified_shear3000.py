@@ -1,19 +1,16 @@
 #!/usr/bin/env python
 
-## Photo-z and shear calibration marginalization already absorbed in Covariance
+import sys, os
+sys.path.append(os.path.dirname(sys.path[0]))
 
-import sys
-# sys.path.append('/home/u1/xfang/LSSTxSO')
-sys.path.append('/home/u1/xfang/CosmoCov_Fourier')
-
-from cosmolike_libs_LSSTxSO_10x2pt_e1 import * 
+from cosmolike_libs_LSSTxSO_10x2pt import * 
 from schwimmbad import MPIPool
 
-inv=['invcov_Y1_10x2pt','invcov_Y6_10x2pt_modified']
+inv=['invcov_Y1_10x2pt','invcov_Y6_6x2pt_modified_shear3000']
 
-data=['10x2pt_LSSTxSO_Y1','10x2pt_fid-e1-0.1']
+data=['10x2pt_LSSTxSO_Y1','6x2pt_fid_shear3000']
 
-mask=['...','mask_10x2pt.txt']
+mask=['...','mask_6x2pt_shear3000.txt']
 # bary=['LPC_6x2pt_LSSTxSO_Y1','LPC_6x2pt_LSSTxSO_Y6']
 
 source_z=['src_LSSTY1','src_LSSTY6'] 
@@ -43,12 +40,12 @@ data_file = os.path.join(dirname, "datav/",data[model])
 cov_file = os.path.join(dirname, "cov/",inv[model])
 mask_file = os.path.join(dirname, "datav/",mask[model])
 #cov_file = os.path.join("/Users/timeifler/Dropbox/cosmolike_store/LSST_emu/inv/",inv[model])
-chain_file = os.path.join(dirname, "chains/LSSTxSO_10x2pt_model_%d_modified_fixhalo-e1-0.1" %model)
+chain_file = os.path.join(dirname, "chains/LSSTxSO_6x2pt_model_%d_modified_shear3000" %model)
 # bary_file=os.path.join(dirname, "baryons/",bary[model])
 
 initcosmo("halomodel".encode('utf-8'))
-# initbins(15,20.0,3000.0,3000.0,21.0,10,10)
-initbins(25,20.0,7979.0,7979.0,21.0,10,10)
+initbins(25,20.0,7979.0,3000.0,21.0,10,10)
+# initbins(25,20.0,7979.0,7979.0,21.0,10,10)
 
 initpriors(shear_prior[model],sigma_z_shear[model],delta_z_prior_shear[model],sigma_z_prior_shear[model],sigma_z_clustering[model],delta_z_prior_clustering[model],sigma_z_prior_clustering[model])
 initsurvey(survey_designation[model].encode('utf-8'),nsource_table[model],nlens_table[model],area_table[model])
@@ -59,7 +56,7 @@ initfb(1)
 # test also with
 #initpriors("none","none","none","Planck")
 #initpriors("none","none","none","random")
-initprobes("10x2pt".encode('utf-8'))
+initprobes("6x2pt".encode('utf-8'))
 initdatainv(cov_file.encode('utf-8'),data_file.encode('utf-8'),mask_file.encode('utf-8'))
 initcmb("so_Y5".encode('utf-8'))
 
@@ -67,7 +64,7 @@ initcmb("so_Y5".encode('utf-8'))
 skip_shearcalib_phz_sampling()
 
 #sample_params= sample_cosmology_only()
-sample_params = sample_cosmology_10x2_fixhalo(get_N_tomo_shear(),get_N_tomo_clustering(), MG=False, w0wa=False, cov_modified=True)
+sample_params = sample_cosmology_3x2_allsys(get_N_tomo_shear(),get_N_tomo_clustering(),MG=False, w0wa=False, cov_modified=True)
 
 Nwalker = int(sys.argv[1])
 sample_main(sample_params,sigma_z_shear[model],sigma_z_clustering[model],8000,Nwalker,1,chain_file, blind=False, pool=MPIPool())
