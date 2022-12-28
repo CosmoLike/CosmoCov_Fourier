@@ -57,6 +57,9 @@ home_datav_102pt_hf:
 home_102pt_fft_shared:
 	gcc like_fourier_10x2pt.c $(cfftlog) -DRUN_FFT  -shared -o like_fourier_10x2pt_fft.so -fPIC $(opt_home)
 
+home_102pt_fft_shared_1sample:
+	gcc like_fourier_10x2pt.c $(cfftlog) -DRUN_FFT -DONESAMPLE  -shared -o like_fourier_10x2pt_fft_1sample.so -fPIC $(opt_home)
+
 home_102pt_fft_shared_calib:
 	gcc like_fourier_10x2pt.c $(cfftlog) -DRUN_FFT -DTEST_CALIB  -shared -o like_fourier_10x2pt_fft_nocalib.so -fPIC $(opt_home)
 
@@ -72,6 +75,9 @@ ocelote_cov_1sample:
 
 puma_102pt_fft_shared:
 	gcc like_fourier_10x2pt.c $(cfftlog) -DRUN_FFT  -shared -o like_fourier_10x2pt_fft.so -fPIC $(opt_puma)
+
+puma_102pt_fft_shared_1sample:
+	gcc like_fourier_10x2pt.c $(cfftlog) -DRUN_FFT -DONESAMPLE  -shared -o like_fourier_10x2pt_fft_1sample.so -fPIC $(opt_puma)
 
 puma_102pt_fft_shared_calib:
 	gcc like_fourier_10x2pt.c $(cfftlog) -DRUN_FFT -DTEST_CALIB  -shared -o like_fourier_10x2pt_fft_nocalib.so -fPIC $(opt_puma)

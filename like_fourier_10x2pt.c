@@ -809,8 +809,11 @@ void save_zdistr_lenses(int zl){
   // limits.a_min_hm = 1./(1.+10);
 
   // init_bary(argv[2]);
-  // init_binning_fourier(15,20.0,3000.0,3000.0,21.0,10,10);
-  init_binning_fourier(25,20.0,7979.0,7979.0,21.0,10,10);
+  if (sce < 3) {
+    // init_binning_fourier(15,20.0,3000.0,3000.0,21.0,10,10);
+    init_binning_fourier(25,20.0,7979.0,7979.0,21.0,10,10);
+  }
+  if (sce == 3) { init_binning_fourier(25,20.0,7979.0,4000.0,21.0,10,10); } // Roman use lmax_shear=4000
 
   // init_priors(0.002,sigma_zphot_shear[sce],0.001,0.001,sigma_zphot_clustering[sce],0.001,0.001,3.0,1.2,3.8,2.0,16.0,5.0,0.8);
   init_priors(0.002,sigma_zphot_shear[sce],0.001,0.001,sigma_zphot_clustering[sce],0.001,0.001);
