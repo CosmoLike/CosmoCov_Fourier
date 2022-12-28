@@ -450,7 +450,7 @@ double log_multi_like(input_cosmo_params_local ic, input_nuisance_params_local i
   static double *ell;
   static double *ell_Cluster;
   static double darg;
-  double chisqr,a,log_L_prior=0.0, log_L=0.0;;
+  double chisqr,a,log_L_prior=0.0, log_L=0.0;
   
   if(ell==0){
     pred= create_double_vector(0, like.Ndata-1);
@@ -460,6 +460,13 @@ double log_multi_like(input_cosmo_params_local ic, input_nuisance_params_local i
       ell[l]=exp(log(like.lmin)+(l+0.5)*darg);
     }
   }
+
+#ifdef ONESAMPLE
+  for(int i=0;i<tomo.shear_Nbin;i++) {
+    in.lens_z_bias[i] = in.source_z_bias[i];
+    in.lens_z_s = in.source_z_s;
+  }
+#endif
 
   if (set_cosmology_params(ic)==0){
     printf("Cosmology out of bounds\n");
