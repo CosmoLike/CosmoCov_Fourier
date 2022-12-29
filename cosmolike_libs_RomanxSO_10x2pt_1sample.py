@@ -245,7 +245,7 @@ class InputNuisanceParams(IterableStruct):
     @classmethod
     def fiducial(cls):
         c = cls()
-        c.bias[:] = [1.166664,1.403981,1.573795,1.744325,1.925937,2.131001,2.370211,2.651007,3.036247,4.556622]
+        c.bias[:] = [1.166664,1.403981,1.573795,1.744325,1.925937,2.131001,2.370211,2.651007,3.036247,3.6] # can't be too close to prior boundary, sample will go over!
         c.source_z_bias[:] = np.repeat(0.0, 10)
         c.source_z_s = 0.01
         c.lens_z_bias[:] = np.repeat(0.0, 10)
