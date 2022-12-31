@@ -21,7 +21,7 @@ mask=f'{probe}_{survey_designation}_mask.txt'
 
 source_z='src_LSSTY6'
 
-lens_z='lens_LSSTY6'
+lens_z=source_z
 
 sigma_z_shear=0.05
 sigma_z_clustering=sigma_z_shear
