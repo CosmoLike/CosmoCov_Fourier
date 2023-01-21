@@ -157,7 +157,7 @@ void run_cov_AB_CD(char ABCD[2][4], char *OUTFILE, char *PATH, double *ell, doub
 
 
 
-#define N_scenarios 4
+#define N_scenarios 5
 int main(int argc, char** argv)
 {
   
@@ -167,24 +167,25 @@ int main(int argc, char** argv)
 
   // Y1 corresponds to DESC SRD Y1, Y6 corresponds to assuming that we cover the full SO area=0.4*fsky and at a depth of 26.1 which is in a range of reasonable scenarios (see https://github.com/LSSTDESC/ObsStrat/tree/static/static )
   // Roman fiducial: 2000deg^2, nlens=51 (SNR=10), nsrc=66
-  double area_table[N_scenarios]={12300.0,16500.0,18000.,2000.};  // double nsource_table[3]={11.0,23.0,28.0};
+  double area_table[N_scenarios]={12300.0,16500.0,18000.,2000.,2000.};  // double nsource_table[3]={11.0,23.0,28.0};
   // double nlens_table[3]={18.0,41.0,48.0};
 
-  double nsource_table[N_scenarios]={10.7,22.5,27.1, 51.0};
-  double nlens_table[N_scenarios]={13.1,26.8,32.0, 66.0};
+  double nsource_table[N_scenarios]={10.7,22.5,27.1, 51.0,51.0};
+  double nlens_table[N_scenarios]={13.1,26.8,32.0, 66.0,66.0};
   
-  char survey_designation[N_scenarios][200]={"LSSTxSO_Y1","LSSTxSO_Y6","LSSTxSO_Y10", "RomanxSO"};
+  char survey_designation[N_scenarios][200]={"LSSTxSO_Y1","LSSTxSO_Y6","LSSTxSO_Y10", "RomanxSO","RomanxS4"};
   
-  char source_zfile[N_scenarios][400]={"src_LSSTY1","src_LSSTY6","src_LSSTY10", "zdistri_WFIRST_LSST_lensing_fine_bin_norm"};
+  char source_zfile[N_scenarios][400]={"src_LSSTY1","src_LSSTY6","src_LSSTY10", "zdistri_WFIRST_LSST_lensing_fine_bin_norm","zdistri_WFIRST_LSST_lensing_fine_bin_norm"};
 
 #ifdef ONESAMPLE
-  char lens_zfile[N_scenarios][400]={"src_LSSTY1","src_LSSTY6","src_LSSTY10", "zdistri_WFIRST_LSST_lensing_fine_bin_norm"};
+  char lens_zfile[N_scenarios][400]={"src_LSSTY1","src_LSSTY6","src_LSSTY10", "zdistri_WFIRST_LSST_lensing_fine_bin_norm","zdistri_WFIRST_LSST_lensing_fine_bin_norm"};
   nlens_table[0] = nsource_table[0];
   nlens_table[1] = nsource_table[1];
   nlens_table[2] = nsource_table[2];
   nlens_table[3] = nsource_table[3];
+  nlens_table[4] = nsource_table[4];
 #else
-  char lens_zfile[4][400]={"lens_LSSTY1","lens_LSSTY6","lens_LSSTY10", "zdistri_WFIRST_LSST_clustering_fine_bin_norm"};
+  char lens_zfile[N_scenarios][400]={"lens_LSSTY1","lens_LSSTY6","lens_LSSTY10", "zdistri_WFIRST_LSST_clustering_fine_bin_norm","zdistri_WFIRST_LSST_clustering_fine_bin_norm"};
 #endif
 
   int hit=atoi(argv[1]);
@@ -216,7 +217,8 @@ int main(int argc, char** argv)
   init_probes(probe);
 
   if(t==0) init_cmb("so_Y1");
-  if(t>0) init_cmb("so_Y5");
+  if( (t>0) || (t<=3) ) init_cmb("so_Y5");
+  if(t==4) init_cmb("s4");
 
   //set l-bins for shear, ggl, clustering, clusterWL
   double logdl=(log(like.lmax)-log(like.lmin))/like.Ncl;

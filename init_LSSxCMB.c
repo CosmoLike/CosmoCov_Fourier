@@ -800,7 +800,7 @@ void init_cmb(char * cmbName) {
    printf("-----------------------------------\n");
    
    printf("CMB survey: %s\n", cmbName);
-   if (strcmp(cmbName, "cmbs4")==0)
+   if (strcmp(cmbName, "s4")==0)
       set_cmb_cmbs4();
    if (strcmp(cmbName, "so_Y1")==0)
       set_cmb_so_Y1();
@@ -810,13 +810,18 @@ void init_cmb(char * cmbName) {
 
 
 void set_cmb_cmbs4() {
-   sprintf(cmb.name, "cmbs4");
-   cmb.fwhm = 1. * (constants.pi/180.) / 60.;
-   cmb.sensitivity = 1.*(constants.pi/180.)/60.;
-   cmb.pathLensRecNoise = "./cmblensrec/cmbs4/cmb_lmax3000.txt";
+   sprintf(cmb.name, "s4");
+   // cmb.fwhm = 1. * (constants.pi/180.) / 60.;
+   // cmb.sensitivity = 1.*(constants.pi/180.)/60.;
+   cmb.pathLensRecNoise = "./cmblensrec/cmbs4/cmbs4_nlkk.txt";
    like.lmax_kappacmb = 2999.;
-   like.lmax_y = 2999.;
+   like.lmin_kappacmb = 100.;
+   like.lmax_y = 7979.;
+   like.lmin_y = 80.;
+   cmb.fsky=0.4;
+   cmb.path_yNoise = "./ynoise/S4_190604d_2LAT_T_default_noisecurves_deproj0_SENS0_mask_16000_ell_TT_yy.txt";
    printf("path for CMB lens noise: %s\n", cmb.pathLensRecNoise);
+   printf("path for CMB tSZ y noise: %s\n", cmb.path_yNoise);
 }
 
 void set_cmb_so_Y5() {
