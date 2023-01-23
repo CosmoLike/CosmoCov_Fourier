@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=RxS_cv_1smpl
+#SBATCH --job-name=RxSO_cv_1smpl
 #SBATCH --account=timeifler
 #SBATCH --partition=high_priority
 #SBATCH --qos=user_qos_timeifler

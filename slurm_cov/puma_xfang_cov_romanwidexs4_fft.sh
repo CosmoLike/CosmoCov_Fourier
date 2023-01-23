@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=RxS_cv
+#SBATCH --job-name=RWxS4_cv
 #SBATCH --account=timeifler
 #SBATCH --partition=high_priority
 #SBATCH --qos=user_qos_timeifler
@@ -21,5 +21,5 @@ N=9870
 for ((i = 0; i < SLURM_NTASKS; i++)); do
 	i_cov=$((SLURM_ARRAY_TASK_ID*SLURM_NTASKS+i+1));
 	if [[ ${i_cov} -gt N ]]; then break; fi;
-	srun --ntasks 1 --exclusive -c 1 ./compute_covariances_fourier_10x2pt_fft ${i_cov} 3 >&/home/u1/xfang/output/jb_covroman_${i_cov}.log
+	srun --ntasks 1 --exclusive -c 1 ./compute_covariances_fourier_10x2pt_fft ${i_cov} 5 >&/home/u1/xfang/output/jb_covRWxs4_${i_cov}.log
 done;
