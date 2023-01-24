@@ -5,15 +5,15 @@
 import sys, os
 sys.path.append(os.path.dirname(sys.path[0]))
 
-from cosmolike_libs_RomanxCMB_10x2pt_1sample import * 
+from cosmolike_libs_RomanWidexCMB_10x2pt import * 
 from schwimmbad import MPIPool
 
-survey_designation="RomanxSO_1sample"
+survey_designation="RomanWidexS4"
 probes = ['10x2pt', '3x2pt', '6x2pt']
 i = int(sys.argv[1])
 probe = probes[i]
 
-inv=f'invcov_romanxso_1sample_modified_{probe}'
+inv=f'invcov_romanwidexs4_modified_{probe}'
 
 data=f'{probe}_{survey_designation}'
 
@@ -21,10 +21,10 @@ mask=f'{probe}_{survey_designation}_mask.txt'
 
 source_z='zdistri_WFIRST_LSST_lensing_fine_bin_norm'
 
-lens_z=source_z
+lens_z='zdistri_WFIRST_LSST_clustering_fine_bin_norm'
 
-sigma_z_shear=0.01
-sigma_z_clustering=sigma_z_shear
+sigma_z_shear=0.05
+sigma_z_clustering=0.02
 
 lmax_shear = 4000.
 
@@ -40,7 +40,7 @@ area_table=2000.0
 ####
 
 tomo_binning_source="source_std"
-tomo_binning_lens="lens=src"
+tomo_binning_lens="WF_SN10"
 
 file_source_z = os.path.join(dirname, "zdistris/",source_z)
 file_lens_z = os.path.join(dirname, "zdistris/",lens_z)
@@ -66,7 +66,7 @@ initfb(1)
 #initpriors("none","none","none","random")
 initprobes(probe.encode('utf-8'))
 initdatainv(cov_file.encode('utf-8'),data_file.encode('utf-8'),mask_file.encode('utf-8'))
-initcmb("so_Y5".encode('utf-8'))
+initcmb("s4".encode('utf-8'))
 
 # use modified covariance and skip shearcalib and photo-z sampling
 skip_shearcalib_phz_sampling()
