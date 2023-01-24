@@ -5,28 +5,28 @@
 import sys, os
 sys.path.append(os.path.dirname(sys.path[0]))
 
-from cosmolike_libs_RomanxSO_10x2pt import * 
+from cosmolike_libs_LSSTxSO_10x2pt import * 
 from schwimmbad import MPIPool
 
-survey_designation="RomanxS4"
-probes = ['10x2pt', '3x2pt', '6x2pt']
+survey_designation="LSSTxSO_Y6"
+probes = ['10x2pt', '3x2pt', '6x2pt', '8x2pt']
 i = int(sys.argv[1])
 probe = probes[i]
 
-inv=f'invcov_romanxs4_modified_{probe}'
+inv=f'invcov_lsstxso_y6_modified_{probe}'
 
 data=f'{probe}_{survey_designation}'
 
 mask=f'{probe}_{survey_designation}_mask.txt'
 
-source_z='zdistri_WFIRST_LSST_lensing_fine_bin_norm'
+source_z='src_LSSTY6'
 
-lens_z='zdistri_WFIRST_LSST_clustering_fine_bin_norm'
+lens_z='lens_LSSTY6'
 
-sigma_z_shear=0.01
-sigma_z_clustering=0.01
+sigma_z_shear=0.05
+sigma_z_clustering=0.03
 
-lmax_shear = 4000.
+lmax_shear = 7979.
 
 # No need:
 shear_prior=0.003
@@ -40,7 +40,7 @@ area_table=2000.0
 ####
 
 tomo_binning_source="source_std"
-tomo_binning_lens="WF_SN10"
+tomo_binning_lens="LSST_gold"
 
 file_source_z = os.path.join(dirname, "zdistris/",source_z)
 file_lens_z = os.path.join(dirname, "zdistris/",lens_z)
@@ -66,13 +66,13 @@ initfb(1)
 #initpriors("none","none","none","random")
 initprobes(probe.encode('utf-8'))
 initdatainv(cov_file.encode('utf-8'),data_file.encode('utf-8'),mask_file.encode('utf-8'))
-initcmb("s4".encode('utf-8'))
+initcmb("so_Y5".encode('utf-8'))
 
 # use modified covariance and skip shearcalib and photo-z sampling
 skip_shearcalib_phz_sampling()
 
 #sample_params= sample_cosmology_only()
-if i == 0: # 10x2pt
+if i == 0 or i == 3: # 10/8x2pt
 	sample_params = sample_cosmology_10x2_allsys(get_N_tomo_shear(),get_N_tomo_clustering(), MG=False, w0wa=False, cov_modified=True)
 if i == 1 or i == 2: # 3/6x2pt
 	sample_params = sample_cosmology_3x2_allsys(get_N_tomo_shear(),get_N_tomo_clustering(), MG=False, w0wa=False, cov_modified=True)
