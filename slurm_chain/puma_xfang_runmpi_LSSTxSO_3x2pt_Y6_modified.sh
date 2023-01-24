@@ -8,7 +8,7 @@
 #SBATCH --ntasks-per-node=94
 #SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=2gb
-#SBATCH --time=15:00:00
+#SBATCH --time=25:00:00
 
 #SBATCH --output=%A.out
 #SBATCH --error=%A.err
@@ -25,5 +25,5 @@ module load openmpi3/3.1.4
 export MPI_DSM_DISTRIBUTE
 export LD_LIBRARY_PATH="/opt/ohpc/pub/libs/gnu8/gsl/2.6/lib:$LD_LIBRARY_PATH"
 date
-/usr/bin/time mpirun -x LD_LIBRARY_PATH --mca pml ob1 --mca btl ^openib -n 1128 python3 run_sampler/xfang_runLSSTxSO_3x2pt_Y6_modified.py 1128
+/usr/bin/time mpirun -x LD_LIBRARY_PATH --mca pml ob1 --mca btl ^openib -n 1128 python3 run_sampler/xfang_runLSSTxSO_Y6_nx2pt_modified.py 1 1128
 date
