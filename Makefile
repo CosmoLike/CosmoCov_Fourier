@@ -63,7 +63,8 @@ home_102pt_fft_shared_1sample:
 home_102pt_fft_shared_calib:
 	gcc like_fourier_10x2pt.c $(cfftlog) -DRUN_FFT -DTEST_CALIB  -shared -o like_fourier_10x2pt_fft_nocalib.so -fPIC $(opt_home)
 
-
+home_tests:
+	gcc like_fourier_10x2pt_tests.c $(cfftlog) -o ./like_tests $(opt_home)
 
 ocelote_cov:
 	gcc compute_covariances_fourier.c -o ./compute_covariances_fourier $(opt_ocelote)
@@ -95,9 +96,9 @@ puma_cov_102pt_fft:
 puma_cov_102pt_fft_1sample:
 	gcc compute_covariances_fourier_10x2pt.c $(cfftlog) -DRUN_FFT -DONESAMPLE -o ./compute_covariances_fourier_10x2pt_fft_1sample $(opt_puma)
 
-
 puma_cov_102pt_ssc:
-	gcc compute_covariances_fourier_10x2pt_ssc.c -o ./compute_covariances_fourier_10x2pt_ssc $(opt_puma)
+	gcc compute_covariances_fourier_10x2pt.c $(cfftlog) -DRUN_FFT -DSSCONLY -o ./compute_covariances_fourier_10x2pt_fft_ssc $(opt_puma)
+
 
 puma_cov_102pt_slow:
 	gcc compute_covariances_fourier_10x2pt.c -o ./compute_covariances_fourier_10x2pt_slow $(opt_puma) -DSLOW
