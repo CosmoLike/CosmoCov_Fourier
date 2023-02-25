@@ -173,6 +173,10 @@ int main(int argc, char** argv)
 
   double nsource_table[N_scenarios]={10.7,22.5,27.1, 51.0,51.0, 43.0};
   double nlens_table[N_scenarios]={13.1,26.8,32.0, 66.0,66.0, 50.0};
+
+  // Roman uses optimistic scenario (Table 2 of 2004.05271)
+  double sigma_zphot_shear[N_scenarios]={0.05,0.05,0.05, 0.01,0.01, 0.05};
+  double sigma_zphot_clustering[N_scenarios]={0.03,0.03,0.03, 0.01,0.01, 0.02};
   
   char survey_designation[N_scenarios][200]={"LSSTxSO_Y1","LSSTxSO_Y6","LSSTxSO_Y10", "RomanxSO","RomanxS4","RomanWidexS4"};
   
@@ -212,15 +216,18 @@ int main(int argc, char** argv)
   // init_binning_fourier(15,20.0,3000.0,3000.0,0.0,10,10);
   init_binning_fourier(25,20.0,7979.0,7979.0,0.0,10,10);
   init_survey(survey_designation[t],nsource_table[t],nlens_table[t],area_table[t]);
+  // set sigma_zphot_shear and sigma_zphot_clustering for gaussian nz error
+  init_priors(0.002,sigma_zphot_shear[t],0.001,0.001,sigma_zphot_clustering[t],0.001,0.001);
+
   sprintf(arg1,"zdistris/%s",source_zfile[t]);
   sprintf(arg2,"zdistris/%s",lens_zfile[t]); 
 #ifdef ONESAMPLE
-  init_galaxies(arg1,arg2,"none","none","source_std","lens=src");
+  init_galaxies(arg1,arg2,"gaussian","gaussian","source_std","lens=src");
 #else
   if(t < 3) { // LSST
-    init_galaxies(arg1,arg2,"none","none","source_std","LSST_gold");
+    init_galaxies(arg1,arg2,"gaussian","gaussian","source_std","LSST_gold");
   } else { // Roman
-    init_galaxies(arg1,arg2,"none","none","source_std","WF_SN10");
+    init_galaxies(arg1,arg2,"gaussian","gaussian","source_std","WF_SN10");
   }
 #endif
   init_IA("none","GAMA");
