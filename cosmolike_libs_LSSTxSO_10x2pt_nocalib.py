@@ -400,7 +400,7 @@ def sample_main(varied_parameters,sigma_z_shear,sigma_z_clustering, iterations, 
         for row,logl in zip(p,loglike):
             if blind:
                 row = blind_parameters(varied_parameters, row)
-            p_text = '  '.join(str(r) for r in row)
+            p_text = '  '.join(".5e"%r for r in row)
             f.write('%s %e\n' % (p_text,logl))
         f.flush()
     f.close()
