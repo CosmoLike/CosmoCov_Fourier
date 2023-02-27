@@ -74,5 +74,5 @@ skip_shearcalib_phz_sampling()
 sample_params = sample_cosmology_only(False, False)
 
 Nwalker = int(sys.argv[1])
-sample_main(sample_params,sigma_z_shear[model],sigma_z_clustering[model],3100,Nwalker,1,chain_file, blind=False, pool=MPIPool())
+sample_main(sample_params,sigma_z_shear[model],sigma_z_clustering[model],900,Nwalker,1,chain_file, blind=False, pool=MPIPool())
 

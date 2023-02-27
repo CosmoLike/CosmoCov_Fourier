@@ -7,11 +7,14 @@ sys.path.append(os.path.dirname(sys.path[0]))
 from cosmolike_libs_LSSTxSO_10x2pt import * 
 from schwimmbad import MPIPool
 
-inv=['invcov_Y1_10x2pt','invcov_Y6_10x2pt_modified']
+survey_designation="LSSTxSO_Y6"
+probe = '10x2pt'
 
-data=['10x2pt_LSSTxSO_Y1','10x2pt_fid']
+inv=['invcov_Y1_10x2pt',f'invcov_lsstxso_y6_modified_{probe}']
 
-mask=['...','mask_10x2pt.txt']
+data=['10x2pt_LSSTxSO_Y1',f'{probe}_{survey_designation}']
+
+mask=['...',f'{probe}_{survey_designation}_mask.txt']
 # bary=['LPC_6x2pt_LSSTxSO_Y1','LPC_6x2pt_LSSTxSO_Y6']
 
 source_z=['src_LSSTY1','src_LSSTY6'] 
@@ -68,5 +71,5 @@ skip_shearcalib_phz_sampling()
 sample_params = sample_cosmology_10x2_fixhalo(get_N_tomo_shear(),get_N_tomo_clustering(), MG=False, w0wa=False, cov_modified=True)
 
 Nwalker = int(sys.argv[1])
-sample_main(sample_params,sigma_z_shear[model],sigma_z_clustering[model],8000,Nwalker,1,chain_file, blind=False, pool=MPIPool())
+sample_main(sample_params,sigma_z_shear[model],sigma_z_clustering[model],1330,Nwalker,1,chain_file, blind=False, pool=MPIPool())
 
