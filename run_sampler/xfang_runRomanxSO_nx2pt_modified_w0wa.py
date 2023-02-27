@@ -78,5 +78,5 @@ if i == 1 or i == 2: # 3/6x2pt
 	sample_params = sample_cosmology_3x2_allsys(get_N_tomo_shear(),get_N_tomo_clustering(), MG=False, w0wa=True, cov_modified=True)
 
 Nwalker = int(sys.argv[2])
-sample_main(sample_params,sigma_z_shear,sigma_z_clustering,5320,Nwalker,1,chain_file, blind=False, pool=MPIPool())
+sample_main(sample_params,sigma_z_shear,sigma_z_clustering,3100,Nwalker,1,chain_file, blind=False, pool=MPIPool())
 
