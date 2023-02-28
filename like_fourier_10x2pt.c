@@ -662,7 +662,14 @@ void compute_data_vector(char *details, input_cosmo_params_local ic, input_nuisa
   // clock_t t1, t2;
 
   // t1 = clock();
-  
+
+#ifdef ONESAMPLE
+  for(int i=0;i<tomo.shear_Nbin;i++) {
+    in.lens_z_bias[i] = in.source_z_bias[i];
+    in.lens_z_s = in.source_z_s;
+  }
+#endif
+
   set_cosmology_params(ic);
   set_nuisance_shear_calib(in.shear_m);
   set_nuisance_shear_photoz(in.source_z_bias, in.source_z_s);
@@ -737,6 +744,101 @@ void compute_data_vector(char *details, input_cosmo_params_local ic, input_nuisa
   }
   fclose(F);
 
+}
+
+
+double *get_data_vector(input_cosmo_params_local ic, input_nuisance_params_local in)
+{
+
+  int i,j,k,m=0,l;
+  static double *pred;
+  static double *ell;
+  // static double *ell_Cluster;
+  static double darg;
+  double chisqr,a,log_L_prior=0.0;
+  
+  if(ell==0){
+    pred= create_double_vector(0, like.Ndata-1);
+    ell= create_double_vector(0, like.Ncl-1);
+    darg=(log(like.lmax)-log(like.lmin))/like.Ncl;
+    for (l=0;l<like.Ncl;l++){
+      ell[l]=exp(log(like.lmin)+(l+0.5)*darg);
+    }
+  }
+
+#ifdef ONESAMPLE
+  for(int i=0;i<tomo.shear_Nbin;i++) {
+    in.lens_z_bias[i] = in.source_z_bias[i];
+    in.lens_z_s = in.source_z_s;
+  }
+#endif
+
+  set_cosmology_params(ic);
+  set_nuisance_shear_calib(in.shear_m);
+  set_nuisance_shear_photoz(in.source_z_bias, in.source_z_s);
+  set_nuisance_clustering_photoz(in.lens_z_bias, in.lens_z_s);
+  set_nuisance_ia(in.A_ia,in.eta_ia);
+  set_nuisance_gbias(in.bias);
+  set_nuisance_gas(in.gas);
+
+  int start=0;  
+  if(like.shear_shear==1) {
+    set_data_shear(ell, pred, start);
+    start=start+like.Ncl*tomo.shear_Npowerspectra;
+  }
+  if(like.shear_pos==1){
+    printf("ggl, start %d\n", start);
+    set_data_ggl(ell, pred, start);
+    start=start+like.Ncl*tomo.ggl_Npowerspectra;
+  }
+  if(like.pos_pos==1){
+    printf("clustering, start %d\n", start);
+    set_data_clustering(ell,pred, start);
+    start=start+like.Ncl*tomo.clustering_Npowerspectra;
+  }
+
+  if(like.gk==1) {
+    printf("Computing data vector: gk, start %d\n", start);
+    set_data_gk(ell, pred, start);
+    start += like.Ncl * tomo.clustering_Nbin;
+  }
+  if(like.ks==1) {
+    printf("Computing data vector: ks, start %d\n", start);
+    set_data_ks(ell, pred, start);
+    start += like.Ncl * tomo.shear_Nbin;
+  }
+  if (like.kk) {
+    printf("Computing data vector: kk, start %d\n", start);
+    set_data_kk(ell, pred, start);
+    start += like.Ncl;
+  }
+
+  if (like.gy) {
+    printf("Computing data vector: gy, start %d\n", start);
+    set_data_gy(ell, pred, start);
+    start += like.Ncl * tomo.clustering_Nbin;
+  }
+  if (like.sy) {
+    printf("Computing data vector: sy, start %d\n", start);
+    set_data_sy(ell, pred, start);
+    start += like.Ncl * tomo.shear_Nbin;
+  }
+  if (like.ky) {
+    printf("Computing data vector: ky, start %d\n", start);
+    set_data_ky(ell, pred, start);
+    start += like.Ncl;
+  }
+  if (like.yy) {
+    printf("Computing data vector: yy, start %d\n", start);
+    set_data_yy(ell, pred, start);
+    start += like.Ncl;
+  }
+
+  return pred;
+}
+
+int get_Ndata() {
+  return like.Ndata;
 }
 
 void save_zdistr_sources(int zs){

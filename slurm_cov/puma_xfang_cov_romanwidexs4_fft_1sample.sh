@@ -8,7 +8,7 @@
 #SBATCH --array=0-785
 #SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=1gb
-#SBATCH --time=15:00:00
+#SBATCH --time=20:00:00
 #SBATCH --output=%A.out
 #SBATCH --error=%A.err
 #SBATCH --mail-type=END,FAIL
