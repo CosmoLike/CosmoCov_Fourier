@@ -9,6 +9,7 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=5gb
 #SBATCH --time=12:00:00
+#SBATCH --switches=1@3-00:00:00
 
 #SBATCH --output=%A.out
 #SBATCH --error=%A.err
