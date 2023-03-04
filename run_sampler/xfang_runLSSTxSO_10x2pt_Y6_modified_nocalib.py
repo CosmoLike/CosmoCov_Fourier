@@ -11,6 +11,7 @@ from schwimmbad import MPIPool
 survey_designation="LSSTxSO_Y6"
 inv=['invcov_Y1_10x2pt','invcov_lsstxso_y6_modified_10x2pt']
 
+probe = "10x2pt"
 data=f'{probe}_{survey_designation}'
 
 mask=f'{probe}_{survey_designation}_mask.txt'
