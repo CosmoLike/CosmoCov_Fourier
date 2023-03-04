@@ -45,6 +45,13 @@ home_datav_102pt:
 home_datav_102pt_fft:
 	gcc like_fourier_10x2pt.c $(cfftlog) -DRUN_FFT -o ./like_fourier_10x2pt_fft $(opt_home)
 
+# use Ludlow16 mass-concentration for datav
+home_datav_102pt_fft_Ludlow16:
+	gcc like_fourier_10x2pt.c $(cfftlog) -DRUN_FFT -DLUDLOW16 -o ./like_fourier_10x2pt_fft_Ludlow $(opt_home)
+home_datav_102pt_fft_Ludlow16fit:
+	gcc like_fourier_10x2pt.c $(cfftlog) -DRUN_FFT -DLUDLOW16_FIT -o ./like_fourier_10x2pt_fft_Ludlow_fit $(opt_home)
+
+
 home_datav_102pt_fft_1sample:
 	gcc like_fourier_10x2pt.c $(cfftlog) -DRUN_FFT -DONESAMPLE -o ./like_fourier_10x2pt_fft_1sample $(opt_home)
 

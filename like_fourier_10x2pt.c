@@ -37,6 +37,11 @@
 #include "../cosmolike_core/theory/recompute.c"
 #include "../cosmolike_core/theory/cosmo3D.c"
 #include "../cosmolike_core/theory/redshift_spline.c"
+
+#ifdef LUDLOW16
+#include "../cosmolike_core/theory/erfcinv.c"
+#endif
+
 #include "../cosmolike_core/theory/halo_fast.c"
 #include "../cosmolike_core/theory/HOD.c"
 #include "../cosmolike_core/theory/pt.c"
@@ -942,6 +947,13 @@ void save_zdistr_lenses(int zl){
   sprintf(arg3,"%s_1sample",survey_designation[sce]);
 #else
   sprintf(arg3,"%s",survey_designation[sce]);
+#endif
+
+#ifdef LUDLOW16
+  sprintf(arg3,"%s_ludlow16", arg3);
+#endif
+#ifdef LUDLOW16_FIT
+  sprintf(arg3,"%s_ludlow16fit", arg3);
 #endif
 
   input_cosmo_params_local p_cosmo;
