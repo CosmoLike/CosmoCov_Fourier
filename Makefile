@@ -51,6 +51,23 @@ home_datav_102pt_fft_Ludlow16:
 home_datav_102pt_fft_Ludlow16fit:
 	gcc like_fourier_10x2pt.c $(cfftlog) -DRUN_FFT -DLUDLOW16_FIT -o ./like_fourier_10x2pt_fft_Ludlow_fit $(opt_home)
 
+# use Castro HMF
+home_datav_102pt_fft_Castro:
+	make home_datav_102pt_fft_Castro_ROCKSTAR
+	make home_datav_102pt_fft_Castro_AHF
+	make home_datav_102pt_fft_Castro_SUBFIND
+	make home_datav_102pt_fft_Castro_VELOCI
+
+home_datav_102pt_fft_Castro_ROCKSTAR:
+	gcc like_fourier_10x2pt.c $(cfftlog) -DRUN_FFT -DHMF_CASTRO_ROCKSTAR -o ./like_fourier_10x2pt_fft_HMF_CASTRO_ROCKSTAR $(opt_home)
+home_datav_102pt_fft_Castro_AHF:
+	gcc like_fourier_10x2pt.c $(cfftlog) -DRUN_FFT -DHMF_CASTRO_AHF -o ./like_fourier_10x2pt_fft_HMF_CASTRO_AHF $(opt_home)
+home_datav_102pt_fft_Castro_SUBFIND:
+	gcc like_fourier_10x2pt.c $(cfftlog) -DRUN_FFT -DHMF_CASTRO_SUBFIND -o ./like_fourier_10x2pt_fft_HMF_CASTRO_SUBFIND $(opt_home)
+home_datav_102pt_fft_Castro_VELOCI:
+	gcc like_fourier_10x2pt.c $(cfftlog) -DRUN_FFT -DHMF_CASTRO_VELOCI -o ./like_fourier_10x2pt_fft_HMF_CASTRO_VELOCI $(opt_home)
+
+
 
 home_datav_102pt_fft_1sample:
 	gcc like_fourier_10x2pt.c $(cfftlog) -DRUN_FFT -DONESAMPLE -o ./like_fourier_10x2pt_fft_1sample $(opt_home)

@@ -16,7 +16,12 @@ probe = probes[i]
 inv=f'invcov_romanwidexs4_modified_{probe}'
 
 i_impact = int(sys.argv[2])
-impacts = ["ludlow16fit", "", "", ""]
+impacts = ["ludlow16fit", \
+		   "HMF_CASTRO_ROCKSTAR",\
+		   "HMF_CASTRO_AHF", \
+		   "HMF_CASTRO_SUBFIND", \
+		   "HMF_CASTRO_VELOCI"]
+		   
 impact = impacts[i_impact]
 data=f'{probe}_{survey_designation}_{impact}'
 

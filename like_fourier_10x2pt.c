@@ -949,6 +949,19 @@ void save_zdistr_lenses(int zl){
 #ifdef LUDLOW16_FIT
   sprintf(arg3,"%s_ludlow16fit", arg3);
 #endif
+#ifdef HMF_CASTRO_ROCKSTAR
+  sprintf(arg3,"%s_HMF_CASTRO_ROCKSTAR", arg3);
+#endif
+#ifdef HMF_CASTRO_AHF
+  sprintf(arg3,"%s_HMF_CASTRO_AHF", arg3);
+#endif
+#ifdef HMF_CASTRO_SUBFIND
+  sprintf(arg3,"%s_HMF_CASTRO_SUBFIND", arg3);
+#endif
+#ifdef HMF_CASTRO_VELOCI
+  sprintf(arg3,"%s_HMF_CASTRO_VELOCI", arg3);
+#endif
+
 
   input_cosmo_params_local p_cosmo;
   input_nuisance_params_local p_sys;
