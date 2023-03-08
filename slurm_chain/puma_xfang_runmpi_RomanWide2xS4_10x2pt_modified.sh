@@ -26,6 +26,6 @@ module load openmpi3/3.1.4
 export MPI_DSM_DISTRIBUTE
 export LD_LIBRARY_PATH="/opt/ohpc/pub/libs/gnu8/gsl/2.6/lib:$LD_LIBRARY_PATH"
 date
-# /usr/bin/time mpirun -x LD_LIBRARY_PATH --mca pml ob1 --mca btl ^openib -n ${SLURM_NTASKS} python3 run_sampler/xfang_runRomanWide2xS4_nx2pt_modified.py 0 ${SLURM_NTASKS}
-/usr/bin/time mpirun -x LD_LIBRARY_PATH --mca pml ob1 -n ${SLURM_NTASKS} python3 run_sampler/xfang_runRomanWide2xS4_nx2pt_modified.py 0 ${SLURM_NTASKS}
+/usr/bin/time mpirun -x LD_LIBRARY_PATH --mca pml ob1 --mca btl ^openib -n ${SLURM_NTASKS} python3 run_sampler/xfang_runRomanWide2xS4_nx2pt_modified.py 0 ${SLURM_NTASKS}
+# /usr/bin/time mpirun -x LD_LIBRARY_PATH --mca pml ob1 -n ${SLURM_NTASKS} python3 run_sampler/xfang_runRomanWide2xS4_nx2pt_modified.py 0 ${SLURM_NTASKS}
 date
