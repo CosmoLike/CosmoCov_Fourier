@@ -157,7 +157,7 @@ void run_cov_AB_CD(char ABCD[2][4], char *OUTFILE, char *PATH, double *ell, doub
 
 
 
-#define N_scenarios 6
+#define N_scenarios 7
 int main(int argc, char** argv)
 {
   
@@ -168,19 +168,22 @@ int main(int argc, char** argv)
   // Y1 corresponds to DESC SRD Y1, Y6 corresponds to assuming that we cover the full SO area=0.4*fsky and at a depth of 26.1 which is in a range of reasonable scenarios (see https://github.com/LSSTDESC/ObsStrat/tree/static/static )
   // Roman fiducial: 2000deg^2, nsrc=51, nlens=66
   // Roman Wide: 18000deg^2, nsrc=43, nlens=50
-  double area_table[N_scenarios]={12300.0,16500.0,18000.,2000.,2000.,18000.};  // double nsource_table[3]={11.0,23.0,28.0};
+  // Roman Wide2: 10000deg^2, nsrc=43, nlens=50
+  double area_table[N_scenarios]={12300.0,16500.0,18000.,2000.,2000.,18000.,10000.}; 
+  // double nsource_table[3]={11.0,23.0,28.0};
   // double nlens_table[3]={18.0,41.0,48.0};
 
-  double nsource_table[N_scenarios]={10.7,22.5,27.1, 51.0,51.0, 43.0};
-  double nlens_table[N_scenarios]={13.1,26.8,32.0, 66.0,66.0, 50.0};
+  double nsource_table[N_scenarios]={10.7,22.5,27.1, 51.0,51.0, 43.0,43.0};
+  double nlens_table[N_scenarios]={13.1,26.8,32.0, 66.0,66.0, 50.0,50.0};
 
   // Roman uses optimistic scenario (Table 2 of 2004.05271)
-  double sigma_zphot_shear[N_scenarios]={0.05,0.05,0.05, 0.01,0.01, 0.05};
-  double sigma_zphot_clustering[N_scenarios]={0.03,0.03,0.03, 0.01,0.01, 0.02};
+  double sigma_zphot_shear[N_scenarios]={0.05,0.05,0.05, 0.01,0.01, 0.05,0.05};
+  double sigma_zphot_clustering[N_scenarios]={0.03,0.03,0.03, 0.01,0.01, 0.02,0.02};
   
-  char survey_designation[N_scenarios][200]={"LSSTxSO_Y1","LSSTxSO_Y6","LSSTxSO_Y10", "RomanxSO","RomanxS4","RomanWidexS4"};
+  char survey_designation[N_scenarios][200]={"LSSTxSO_Y1","LSSTxSO_Y6","LSSTxSO_Y10", "RomanxSO","RomanxS4","RomanWidexS4","RomanWide2xS4"};
   
   char source_zfile[N_scenarios][400]={"src_LSSTY1","src_LSSTY6","src_LSSTY10", \
+                  "zdistri_WFIRST_LSST_lensing_fine_bin_norm",\
                   "zdistri_WFIRST_LSST_lensing_fine_bin_norm",\
                   "zdistri_WFIRST_LSST_lensing_fine_bin_norm",\
                   "zdistri_WFIRST_LSST_lensing_fine_bin_norm"};
@@ -189,15 +192,13 @@ int main(int argc, char** argv)
   char lens_zfile[N_scenarios][400]={"src_LSSTY1","src_LSSTY6","src_LSSTY10", \
                   "zdistri_WFIRST_LSST_lensing_fine_bin_norm",\
                   "zdistri_WFIRST_LSST_lensing_fine_bin_norm",\
+                  "zdistri_WFIRST_LSST_lensing_fine_bin_norm",\
                   "zdistri_WFIRST_LSST_lensing_fine_bin_norm"};
-  nlens_table[0] = nsource_table[0];
-  nlens_table[1] = nsource_table[1];
-  nlens_table[2] = nsource_table[2];
-  nlens_table[3] = nsource_table[3];
-  nlens_table[4] = nsource_table[4];
-  nlens_table[5] = nsource_table[5];
+  for (i=0; i<N_scenarios; i++) {nlens_table[i] = nsource_table[i];}
+
 #else
   char lens_zfile[N_scenarios][400]={"lens_LSSTY1","lens_LSSTY6","lens_LSSTY10", \
+                  "zdistri_WFIRST_LSST_clustering_fine_bin_norm",\
                   "zdistri_WFIRST_LSST_clustering_fine_bin_norm",\
                   "zdistri_WFIRST_LSST_clustering_fine_bin_norm",\
                   "zdistri_WFIRST_LSST_clustering_fine_bin_norm"};
@@ -236,7 +237,7 @@ int main(int argc, char** argv)
 
   if(t==0) init_cmb("so_Y1");
   if( (t>0) || (t<=3) ) init_cmb("so_Y5");
-  if(t==4 || t==5) init_cmb("s4");
+  if(t==4 || t==5 || t==6) init_cmb("s4");
 
   //set l-bins for shear, ggl, clustering, clusterWL
   double logdl=(log(like.lmax)-log(like.lmin))/like.Ncl;
