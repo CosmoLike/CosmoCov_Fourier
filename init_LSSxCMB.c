@@ -495,6 +495,40 @@ void init_probes(char *probes)
     like.kk = 1;
     printf("CMBkappa-CMBkappa computation initialized\n");
   }
+  if(strcmp(probes,"6x2pt_sy")==0) { // 6x2pt+sy
+    like.Ndata = like.Ncl * (tomo.shear_Npowerspectra+tomo.ggl_Npowerspectra+tomo.clustering_Npowerspectra+tomo.clustering_Nbin+2*tomo.shear_Nbin+1);
+    like.pos_pos = 1;
+    like.gk = 1;
+    like.shear_pos = 1;
+    like.kk = 1;
+    like.ks = 1;
+    like.shear_shear = 1;
+    like.sy = 1;
+    printf("Shear-Shear computation initialized\n");
+    printf("Shear-Position computation initialized\n");
+    printf("Position-Position computation initialized\n");
+    printf("CMBkappa-Shear computation initialized\n");
+    printf("CMBkappa-Position computation initialized\n");
+    printf("CMBkappa-CMBkappa computation initialized\n");
+    printf("y-Shear computation initialized\n");
+  }
+  if(strcmp(probes,"6x2pt_yy")==0) { // 6x2pt + yy
+    like.Ndata = like.Ncl * (tomo.shear_Npowerspectra+tomo.ggl_Npowerspectra+tomo.clustering_Npowerspectra+tomo.clustering_Nbin+tomo.shear_Nbin+2);
+    like.pos_pos = 1;
+    like.gk = 1;
+    like.shear_pos = 1;
+    like.kk = 1;
+    like.ks = 1;
+    like.shear_shear = 1;
+    like.yy = 1;
+    printf("Shear-Shear computation initialized\n");
+    printf("Shear-Position computation initialized\n");
+    printf("Position-Position computation initialized\n");
+    printf("CMBkappa-Shear computation initialized\n");
+    printf("CMBkappa-Position computation initialized\n");
+    printf("CMBkappa-CMBkappa computation initialized\n");
+    printf("y-y computation initialized\n");
+  }
   if(strcmp(probes,"8x2pt")==0) { // no gy and ky
     like.Ndata = like.Ncl * (tomo.shear_Npowerspectra+tomo.ggl_Npowerspectra+tomo.clustering_Npowerspectra+tomo.clustering_Nbin+2*tomo.shear_Nbin+2);
     like.pos_pos = 1;
