@@ -9,7 +9,7 @@ from cosmolike_libs_LSSTxSO_10x2pt import *
 from schwimmbad import MPIPool
 
 survey_designation="LSSTxSO_Y6"
-probes = ['10x2pt', '3x2pt', '6x2pt', '8x2pt']
+probes = ['10x2pt', '3x2pt', '6x2pt', '8x2pt', '6x2pt_sy', '6x2pt_yy']
 i = int(sys.argv[1])
 probe = probes[i]
 
@@ -72,11 +72,11 @@ initcmb("so_Y5".encode('utf-8'))
 skip_shearcalib_phz_sampling()
 
 #sample_params= sample_cosmology_only()
-if i == 0 or i == 3: # 10/8x2pt
+if i in [0, 3, 4, 5]: # 10/8x2pt/6x2pt_sy/6x2pt_yy
 	sample_params = sample_cosmology_10x2_allsys(get_N_tomo_shear(),get_N_tomo_clustering(), MG=False, w0wa=False, cov_modified=True)
 if i == 1 or i == 2: # 3/6x2pt
 	sample_params = sample_cosmology_3x2_allsys(get_N_tomo_shear(),get_N_tomo_clustering(), MG=False, w0wa=False, cov_modified=True)
 
 Nwalker = int(sys.argv[2])
-sample_main(sample_params,sigma_z_shear,sigma_z_clustering,3100,Nwalker,1,chain_file, blind=False, pool=MPIPool())
+sample_main(sample_params,sigma_z_shear,sigma_z_clustering,6200,Nwalker,1,chain_file, blind=False, pool=MPIPool())
 

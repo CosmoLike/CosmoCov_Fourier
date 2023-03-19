@@ -8,11 +8,11 @@ sys.path.append(os.path.dirname(sys.path[0]))
 from cosmolike_libs_LSSTxSO_10x2pt_nocalib import * 
 from schwimmbad import MPIPool
 
-inv=['invcov_Y1_10x2pt','invcov_lsstxso_y6_modified_s3000_10x2pt']
+inv=['invcov_Y1_10x2pt','invcov_lsstxso_y6_modified_s3000_8x2pt']
 
-data=['10x2pt_LSSTxSO_Y1','10x2pt_LSSTxSO_Y6_s3000']
+data=['10x2pt_LSSTxSO_Y1','8x2pt_LSSTxSO_Y6_s3000']
 
-mask=['...','10x2pt_LSSTxSO_Y6_s3000_mask.txt']
+mask=['...','8x2pt_LSSTxSO_Y6_s3000_mask.txt']
 # bary=['LPC_6x2pt_LSSTxSO_Y1','LPC_6x2pt_LSSTxSO_Y6']
 
 source_z=['src_LSSTY1','src_LSSTY6'] 
@@ -42,7 +42,7 @@ data_file = os.path.join(dirname, "datav/",data[model])
 cov_file = os.path.join(dirname, "cov/",inv[model])
 mask_file = os.path.join(dirname, "datav/",mask[model])
 #cov_file = os.path.join("/Users/timeifler/Dropbox/cosmolike_store/LSST_emu/inv/",inv[model])
-chain_file = os.path.join(dirname, "chains/LSSTxSO_10x2pt_model_%d_modified_shear3000_nocalib" %model)
+chain_file = os.path.join(dirname, "chains/LSSTxSO_8x2pt_model_%d_modified_shear3000_nocalib" %model)
 # bary_file=os.path.join(dirname, "baryons/",bary[model])
 
 initcosmo("halomodel".encode('utf-8'))
@@ -58,7 +58,7 @@ initfb(1)
 # test also with
 #initpriors("none","none","none","Planck")
 #initpriors("none","none","none","random")
-initprobes("10x2pt".encode('utf-8'))
+initprobes("8x2pt".encode('utf-8'))
 initdatainv(cov_file.encode('utf-8'),data_file.encode('utf-8'),mask_file.encode('utf-8'))
 initcmb("so_Y5".encode('utf-8'))
 

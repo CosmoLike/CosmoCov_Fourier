@@ -8,11 +8,13 @@ sys.path.append(os.path.dirname(sys.path[0]))
 from cosmolike_libs_LSSTxSO_10x2pt_nocalib import * 
 from schwimmbad import MPIPool
 
-inv=['invcov_Y1_10x2pt','invcov_lsstxso_y6_modified_s3000_10x2pt']
+survey_designation="LSSTxSO_Y6"
+inv=['invcov_Y1_10x2pt','invcov_lsstxso_y6_modified_8x2pt']
 
-data=['10x2pt_LSSTxSO_Y1','10x2pt_LSSTxSO_Y6_s3000']
+probe = "8x2pt"
+data=f'{probe}_{survey_designation}'
 
-mask=['...','10x2pt_LSSTxSO_Y6_s3000_mask.txt']
+mask=f'{probe}_{survey_designation}_mask.txt'
 # bary=['LPC_6x2pt_LSSTxSO_Y1','LPC_6x2pt_LSSTxSO_Y6']
 
 source_z=['src_LSSTY1','src_LSSTY6'] 
@@ -38,16 +40,16 @@ tomo_binning_lens=["LSST_gold","LSST_gold"]
 model=1
 file_source_z = os.path.join(dirname, "zdistris/",source_z[model])
 file_lens_z = os.path.join(dirname, "zdistris/",lens_z[model])
-data_file = os.path.join(dirname, "datav/",data[model])
+data_file = os.path.join(dirname, "datav/",data)
 cov_file = os.path.join(dirname, "cov/",inv[model])
-mask_file = os.path.join(dirname, "datav/",mask[model])
+mask_file = os.path.join(dirname, "datav/",mask)
 #cov_file = os.path.join("/Users/timeifler/Dropbox/cosmolike_store/LSST_emu/inv/",inv[model])
-chain_file = os.path.join(dirname, "chains/LSSTxSO_10x2pt_model_%d_modified_shear3000_nocalib" %model)
+chain_file = os.path.join(dirname, "chains/LSSTxSO_8x2pt_model_%d_modified_nocalib" %model)
 # bary_file=os.path.join(dirname, "baryons/",bary[model])
 
 initcosmo("halomodel".encode('utf-8'))
 # initbins(15,20.0,3000.0,3000.0,21.0,10,10)
-initbins(25,20.0,7979.0,3000.0,21.0,10,10)
+initbins(25,20.0,7979.0,7979.0,21.0,10,10)
 
 initpriors(shear_prior[model],sigma_z_shear[model],delta_z_prior_shear[model],sigma_z_prior_shear[model],sigma_z_clustering[model],delta_z_prior_clustering[model],sigma_z_prior_clustering[model])
 initsurvey(survey_designation[model].encode('utf-8'),nsource_table[model],nlens_table[model],area_table[model])
@@ -58,7 +60,7 @@ initfb(1)
 # test also with
 #initpriors("none","none","none","Planck")
 #initpriors("none","none","none","random")
-initprobes("10x2pt".encode('utf-8'))
+initprobes("8x2pt".encode('utf-8'))
 initdatainv(cov_file.encode('utf-8'),data_file.encode('utf-8'),mask_file.encode('utf-8'))
 initcmb("so_Y5".encode('utf-8'))
 
