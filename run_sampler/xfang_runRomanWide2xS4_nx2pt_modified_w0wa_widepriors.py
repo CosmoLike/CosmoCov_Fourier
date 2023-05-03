@@ -51,7 +51,7 @@ data_file = os.path.join(dirname, "datav/",data)
 cov_file = os.path.join(dirname, "cov/",inv)
 mask_file = os.path.join(dirname, "datav/",mask)
 #cov_file = os.path.join("/Users/timeifler/Dropbox/cosmolike_store/LSST_emu/inv/",inv)
-chain_file = os.path.join(dirname, f"chains/{survey_designation}_{probe}_modified_w0wa")
+chain_file = os.path.join(dirname, f"chains/{survey_designation}_{probe}_modified_w0wa_widepriorx{wideprior_factor}")
 # bary_file=os.path.join(dirname, "baryons/",bary)
 
 initcosmo("halomodel".encode('utf-8'))
