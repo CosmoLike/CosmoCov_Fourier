@@ -101,14 +101,14 @@ class Cov:
         return invc
     
     def get_det_eig_cov_masked(self, mask=None, inds=None):
-        fullmask = np.ones(self.ndata, dtype=np.int)
+        fullmask = np.ones(self.ndata, dtype=np.int64)
         masked = False
         if mask is not None:
             fullmask *= mask
             masked = True
         
         if inds is not None:
-            tmpmask = np.zeros(self.ndata, dtype=np.int)
+            tmpmask = np.zeros(self.ndata, dtype=np.int64)
             tmpmask[inds] = 1
             fullmask *= tmpmask
             masked = True
