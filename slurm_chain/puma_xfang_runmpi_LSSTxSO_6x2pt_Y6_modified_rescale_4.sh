@@ -2,7 +2,8 @@
 #SBATCH --job-name=lsstso6_6x2
 #SBATCH --account=timeifler
 #SBATCH --partition=high_priority
-#SBATCH --qos=user_qos_timeifler
+# SBATCH --qos=user_qos_timeifler
+#SBATCH --qos=qual_qos_timeifler
 #SBATCH --nodes=6
 #SBATCH --ntasks=564
 #SBATCH --ntasks-per-node=94
