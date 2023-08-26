@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=RWxS4_10x2
+#SBATCH --job-name=RW2xS4_10x2
 #SBATCH --account=timeifler
 #SBATCH --partition=high_priority
 #SBATCH --qos=user_qos_timeifler
@@ -26,5 +26,5 @@ module load openmpi3/3.1.4
 export MPI_DSM_DISTRIBUTE
 export LD_LIBRARY_PATH="/opt/ohpc/pub/libs/gnu8/gsl/2.6/lib:$LD_LIBRARY_PATH"
 date
-/usr/bin/time mpirun -x LD_LIBRARY_PATH --mca pml ob1 --mca btl ^openib -n ${SLURM_NTASKS} python3 run_sampler/xfang_runRomanWidexS4_nx2pt_modified_impacts_w0wa.py 0 0 ${SLURM_NTASKS}
+/usr/bin/time mpirun -x LD_LIBRARY_PATH --mca pml ob1 --mca btl ^openib -n ${SLURM_NTASKS} python3 run_sampler/xfang_runRomanWide2xS4_nx2pt_modified_impacts_w0wa.py 0 0 ${SLURM_NTASKS}
 date
