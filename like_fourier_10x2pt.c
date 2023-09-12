@@ -883,7 +883,7 @@ void save_zdistr_lenses(int zl){
 
 
   // Roman uses optimistic scenario (Table 2 of 2004.05271)
-  double sigma_zphot_shear[N_scenarios]={0.05,0.05,0.05, 0.01,0.01, 0.05,0.05};
+  double sigma_zphot_shear[N_scenarios]={0.05,0.05,0.05, 0.01,0.01, 0.02,0.02};
   double sigma_zphot_clustering[N_scenarios]={0.03,0.03,0.03, 0.01,0.01, 0.02,0.02};
 
   double area_table[N_scenarios]={12300.0,16500.0,18000.0, 2000.0,2000.0,18000.,10000.}; // Y1 corresponds to DESC SRD Y1, Y6 corresponds to assuming that we cover the full SO area=0.4*fsky and at a depth of 26.1 which is in a range of reasonable scenarios (see https://github.com/LSSTDESC/ObsStrat/tree/static/static )

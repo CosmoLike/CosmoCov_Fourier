@@ -247,7 +247,7 @@ class InputNuisanceParams(IterableStruct):
         c = cls()
         c.bias[:] = [1.3 + 0.1*i for i in range(10)]
         c.source_z_bias[:] = np.repeat(0.0, 10)
-        c.source_z_s = 0.05
+        c.source_z_s = 0.02
         c.lens_z_bias[:] = np.repeat(0.0, 10)
         c.lens_z_s = 0.02
         c.shear_m[:] = np.repeat(0.0, 10)
