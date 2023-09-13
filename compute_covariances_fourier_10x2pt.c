@@ -236,7 +236,7 @@ int main(int argc, char** argv)
   init_probes(probe);
 
   if(t==0) init_cmb("so_Y1");
-  if( (t>0) || (t<=3) ) init_cmb("so_Y5");
+  if( (t>0) && (t<=3) ) init_cmb("so_Y5");
   if(t==4 || t==5 || t==6) init_cmb("s4");
 
   //set l-bins for shear, ggl, clustering, clusterWL
