@@ -177,7 +177,7 @@ int main(int argc, char** argv)
   double nlens_table[N_scenarios]={13.1,26.8,32.0, 66.0,66.0, 50.0,50.0};
 
   // Roman uses optimistic scenario (Table 2 of 2004.05271)
-  double sigma_zphot_shear[N_scenarios]={0.05,0.05,0.05, 0.01,0.01, 0.05,0.05};
+  double sigma_zphot_shear[N_scenarios]={0.05,0.05,0.05, 0.01,0.01, 0.02,0.02};
   double sigma_zphot_clustering[N_scenarios]={0.03,0.03,0.03, 0.01,0.01, 0.02,0.02};
   
   char survey_designation[N_scenarios][200]={"LSSTxSO_Y1","LSSTxSO_Y6","LSSTxSO_Y10", "RomanxSO","RomanxS4","RomanWidexS4","RomanWide2xS4"};
